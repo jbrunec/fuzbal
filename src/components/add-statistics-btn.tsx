@@ -1,14 +1,12 @@
+import { AddPlayerStatisticsForm } from "@/components/player-statistics-form";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { AddPlayerStatisticsForm } from "@/components/player-statistics-form";
 import { useState } from "react";
 
 export function AddStatisticsBtn() {
@@ -26,7 +24,7 @@ export function AddStatisticsBtn() {
         </DialogHeader>
         <AddPlayerStatisticsForm
           onCancel={() => setOpen(false)}
-          onSubmit={() => setOpen(false)}
+          onSubmitForm={() => setOpen(false)}
         />
       </DialogContent>
     </Dialog>

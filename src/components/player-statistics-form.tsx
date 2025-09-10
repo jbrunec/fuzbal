@@ -8,22 +8,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useUpdateStatisticsMutation } from "@/queries";
+import { convexQuery } from "@convex-dev/react-query";
 import { AnyFieldApi, useForm } from "@tanstack/react-form";
-
-const players = [
-  { name: "Jernej" },
-  { name: "Miha" },
-  { name: "Uros" },
-  { name: "Simon" },
-  { name: "Luka" },
-  { name: "Robi" },
-];
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { api } from "convex/_generated/api";
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
     <>
       {field.state.meta.isTouched && !field.state.meta.isValid ? (
-        <em>{field.state.meta.errors.join(",")}</em>
+        <em className="text-red-500">{field.state.meta.errors.join(",")}</em>
       ) : null}
       {field.state.meta.isValidating ? "Validating..." : null}
     </>
@@ -32,11 +27,16 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 
 export function AddPlayerStatisticsForm({
   onCancel,
-  onSubmit,
+  onSubmitForm,
 }: {
   onCancel: () => void;
-  onSubmit: () => void;
+  onSubmitForm: () => void;
 }) {
+  const { mutate } = useUpdateStatisticsMutation();
+  const { data: players } = useSuspenseQuery(
+    convexQuery(api.players.getPlayers, {})
+  );
+
   const form = useForm({
     defaultValues: {
       teamRed: {
@@ -51,8 +51,8 @@ export function AddPlayerStatisticsForm({
       },
     },
     onSubmit: async ({ value }) => {
-      // Do something with form data
-      console.log(value);
+      console.log("onSubmit: ", value);
+      mutate({ data: value });
     },
   });
   return (
@@ -61,7 +61,7 @@ export function AddPlayerStatisticsForm({
         e.preventDefault();
         e.stopPropagation();
         form.handleSubmit();
-        onSubmit();
+        onSubmitForm();
       }}
     >
       <div className="grid gap-4">
@@ -76,7 +76,7 @@ export function AddPlayerStatisticsForm({
                 </SelectTrigger>
                 <SelectContent>
                   {players.map((player) => (
-                    <SelectItem key={player.name} value={player.name}>
+                    <SelectItem key={player._id} value={player._id}>
                       {player.name}
                     </SelectItem>
                   ))}
@@ -96,11 +96,11 @@ export function AddPlayerStatisticsForm({
                   <SelectValue placeholder="Select a player" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Jernej">Jernej</SelectItem>
-                  <SelectItem value="Miha">Miha</SelectItem>
-                  <SelectItem value="Uros">Uros</SelectItem>
-                  <SelectItem value="Simon">Simon</SelectItem>
-                  <SelectItem value="Luka">Luka</SelectItem>
+                  {players.map((player) => (
+                    <SelectItem key={player._id} value={player._id}>
+                      {player.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FieldInfo field={field} />
@@ -109,6 +109,12 @@ export function AddPlayerStatisticsForm({
         />
         <form.Field
           name="teamRed.goals"
+          validators={{
+            onChange: ({ value }) =>
+              value < 0 || value > 7
+                ? "Number out of range (0 - 7)"
+                : undefined,
+          }}
           children={(field) => (
             <div className="grid gap-3">
               <Label htmlFor={field.name}>Team Red Goals</Label>
@@ -117,7 +123,7 @@ export function AddPlayerStatisticsForm({
                 name={field.name}
                 type="number"
                 min={0}
-                max={9}
+                max={7}
                 onChange={(e) => field.handleChange(Number(e.target.value))}
               />
               <FieldInfo field={field} />
@@ -135,7 +141,7 @@ export function AddPlayerStatisticsForm({
                 </SelectTrigger>
                 <SelectContent>
                   {players.map((player) => (
-                    <SelectItem key={player.name} value={player.name}>
+                    <SelectItem key={player._id} value={player._id}>
                       {player.name}
                     </SelectItem>
                   ))}
@@ -156,7 +162,7 @@ export function AddPlayerStatisticsForm({
                 </SelectTrigger>
                 <SelectContent>
                   {players.map((player) => (
-                    <SelectItem key={player.name} value={player.name}>
+                    <SelectItem key={player._id} value={player._id}>
                       {player.name}
                     </SelectItem>
                   ))}
@@ -168,6 +174,12 @@ export function AddPlayerStatisticsForm({
         />
         <form.Field
           name="teamBlue.goals"
+          validators={{
+            onChange: ({ value }) =>
+              value < 0 || value > 7
+                ? "Number out of range (0 - 7)"
+                : undefined,
+          }}
           children={(field) => (
             <div className="grid gap-3">
               <Label htmlFor={field.name}>Team Blue Goals</Label>
@@ -184,11 +196,25 @@ export function AddPlayerStatisticsForm({
           )}
         />
       </div>
-      <div className="flex gap-2 mt-6 justify-end">
-        <Button variant="outline" onClick={onCancel}>
+      <div className="flex gap-2 mt-6 justify-between">
+        <Button variant="outline" onClick={onCancel} type="reset">
           Cancel
         </Button>
-        <Button type="submit">Submit</Button>
+        <form.Subscribe
+          selector={(state) => [
+            state.canSubmit,
+            state.isSubmitting,
+            state.isPristine,
+          ]}
+          children={([canSubmit, isSubmitting, isPristine]) => (
+            <Button
+              type="submit"
+              disabled={!canSubmit || isSubmitting || isPristine}
+            >
+              {isSubmitting ? "..." : "Submit"}
+            </Button>
+          )}
+        />
       </div>
     </form>
   );

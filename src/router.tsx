@@ -1,20 +1,61 @@
-import { createRouter as createTanstackRouter } from '@tanstack/react-router'
+import { createRouter as createTanStackRouter } from "@tanstack/react-router";
+import {
+  MutationCache,
+  QueryClient,
+  notifyManager,
+} from "@tanstack/react-query";
+import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
+import { ConvexQueryClient } from "@convex-dev/react-query";
+import { ConvexProvider } from "convex/react";
+import { routeTree } from "./routeTree.gen";
 
-// Import the generated route tree
-import { routeTree } from './routeTree.gen'
+export function createRouter() {
+  if (typeof document !== "undefined") {
+    notifyManager.setScheduler(window.requestAnimationFrame);
+  }
 
-// Create a new router instance
-export const createRouter = () => {
-  return createTanstackRouter({
+  const CONVEX_URL = (import.meta as any).env.VITE_CONVEX_URL!;
+  if (!CONVEX_URL) {
+    console.error("missing envar CONVEX_URL");
+  }
+  const convexQueryClient = new ConvexQueryClient(CONVEX_URL);
+
+  const queryClient: QueryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        queryKeyHashFn: convexQueryClient.hashFn(),
+        queryFn: convexQueryClient.queryFn(),
+      },
+    },
+    mutationCache: new MutationCache({
+      onError: (error) => {
+        console.error(error.message);
+      },
+    }),
+  });
+  convexQueryClient.connect(queryClient);
+
+  const router = createTanStackRouter({
     routeTree,
+    defaultPreload: "intent",
+    context: { QueryClient: queryClient },
+    Wrap: ({ children }) => (
+      <ConvexProvider client={convexQueryClient.convexClient}>
+        {children}
+      </ConvexProvider>
+    ),
     scrollRestoration: true,
-    defaultPreloadStaleTime: 0,
-  })
+  });
+  setupRouterSsrQueryIntegration({
+    router,
+    queryClient,
+  });
+
+  return router;
 }
 
-// Register the router instance for type safety
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface Register {
-    router: ReturnType<typeof createRouter>
+    router: ReturnType<typeof createRouter>;
   }
 }
