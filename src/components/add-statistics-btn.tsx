@@ -14,7 +14,7 @@ export function AddStatisticsBtn() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="hover:bg-accent hover:text-accent-foreground cursor-pointer">
+        <Button className="hover:bg-accent hover:text-accent-foreground">
           Add Match
         </Button>
       </DialogTrigger>

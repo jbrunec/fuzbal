@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUpdateStatisticsMutation } from "@/queries";
+import { playerSchema } from "@/schemas";
 import { convexQuery } from "@convex-dev/react-query";
 import { AnyFieldApi, useForm } from "@tanstack/react-form";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -50,6 +51,9 @@ export function AddPlayerStatisticsForm({
         goals: 0,
       },
     },
+    validators: {
+      onChange: playerSchema,
+    },
     onSubmit: async ({ value }) => {
       console.log("onSubmit: ", value);
       mutate({ data: value });
@@ -67,6 +71,12 @@ export function AddPlayerStatisticsForm({
       <div className="grid gap-4">
         <form.Field
           name="teamRed.attacker"
+          validators={{
+            onChange: ({ value }) => {
+              console.log("validator: ", value);
+              return !value ? "Player required!" : undefined;
+            },
+          }}
           children={(field) => (
             <div className="grid gap-3">
               <Label htmlFor={field.name}>Team Red Attacker</Label>
@@ -88,10 +98,19 @@ export function AddPlayerStatisticsForm({
         />
         <form.Field
           name="teamRed.defender"
+          validators={{
+            onChange: ({ value }) => {
+              console.log("validator: ", value);
+              return !value ? "there is a value" : undefined;
+            },
+          }}
           children={(field) => (
             <div className="grid gap-3">
               <Label htmlFor={field.name}>Team Red Defender</Label>
-              <Select onValueChange={(value) => field.handleChange(value)}>
+              <Select
+                onValueChange={(value) => field.handleChange(value)}
+                required
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a player" />
                 </SelectTrigger>
@@ -132,6 +151,12 @@ export function AddPlayerStatisticsForm({
         />
         <form.Field
           name="teamBlue.attacker"
+          validators={{
+            onChange: ({ value }) => {
+              console.log("validator: ", value);
+              return !value ? "there is a value" : undefined;
+            },
+          }}
           children={(field) => (
             <div className="grid gap-3">
               <Label htmlFor={field.name}>Team Blue Attacker</Label>
@@ -153,6 +178,12 @@ export function AddPlayerStatisticsForm({
         />
         <form.Field
           name="teamBlue.defender"
+          validators={{
+            onChange: ({ value }) => {
+              console.log("validator: ", value);
+              return !value ? "there is a value" : undefined;
+            },
+          }}
           children={(field) => (
             <div className="grid gap-3">
               <Label htmlFor={field.name}>Team Blue Defender</Label>

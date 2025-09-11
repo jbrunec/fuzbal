@@ -85,4 +85,5 @@ function hasWon(
   if (team === "teamBlue") {
     return gameData[team].goals > gameData["teamRed"].goals;
   }
+  return false;
 }

@@ -1,3 +1,6 @@
+import { playerSchema } from "@/schemas";
+import z from "zod";
+
 export type Player = {
   name: string;
   games: number;
@@ -7,15 +10,4 @@ export type Player = {
   winPercentage: number;
 };
 
-export type AddPlayerStatisticsFormData = {
-  teamRed: {
-    attacker: string;
-    defender: string;
-    goals: number;
-  };
-  teamBlue: {
-    attacker: string;
-    defender: string;
-    goals: number;
-  };
-};
+export type AddPlayerStatisticsFormData = z.infer<typeof playerSchema>;
