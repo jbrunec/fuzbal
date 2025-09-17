@@ -33,7 +33,6 @@ export function PlayersTable({ data }: { data: Player[] }) {
   });
   return (
     <>
-      <h2 className="text-center text-2xl">Tabela</h2>
       <div className="overflow-x-auto rounded-md border border-gray-800 bg-gray-900">
         <Table className="sm:min-w-full">
           <TableHeader>
