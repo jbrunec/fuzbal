@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Player } from "@/routes";
 import {
   flexRender,
   getCoreRowModel,
@@ -16,6 +15,7 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { columns } from "./columns";
+import { Player } from "@/types";
 
 export function PlayersTable({ data }: { data: Player[] }) {
   const [sorting, setSorting] = useState<SortingState>([
@@ -34,8 +34,8 @@ export function PlayersTable({ data }: { data: Player[] }) {
   return (
     <>
       <h2 className="text-center text-2xl">Tabela</h2>
-      <div className="overflow-hidden rounded-md border border-gray-800 bg-gray-900">
-        <Table>
+      <div className="overflow-x-auto rounded-md border border-gray-800 bg-gray-900">
+        <Table className="sm:min-w-full">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
@@ -46,7 +46,7 @@ export function PlayersTable({ data }: { data: Player[] }) {
                   return (
                     <TableHead
                       key={header.id}
-                      className="text-gray-300 font-medium"
+                      className="text-gray-300 font-medium text-xs sm:text-sm sm:px-4 sm:py-3"
                     >
                       {header.isPlaceholder
                         ? null
@@ -69,7 +69,10 @@ export function PlayersTable({ data }: { data: Player[] }) {
                   className="border-gray-800 hover:bg-gray-800/30"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-gray-100">
+                    <TableCell
+                      key={cell.id}
+                      className="text-gray-100 px-1 py-1 text-xs sm:text-sm sm:px-4 sm:py-3"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Player } from "@/routes";
+import { Player } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
@@ -11,10 +11,10 @@ export const columns: ColumnDef<Player>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="hover:bg-accent"
+          className="hover:bg-accent text-gray-300 hover:text-white px-1 py-1 text-xs sm:text-sm sm:px-3 sm:py-2 h-auto"
         >
           Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="hidden sm:block sm:ml-2 sm:h-4 sm:w-4" />
         </Button>
       );
     },
@@ -26,10 +26,10 @@ export const columns: ColumnDef<Player>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="hover:bg-accent"
+          className="hover:bg-accent text-gray-300 hover:text-white px-1 py-1 text-xs sm:text-sm sm:px-3 sm:py-2 h-auto"
         >
           Games
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="hidden sm:block sm:ml-2 sm:h-4 sm:w-4" />
         </Button>
       );
     },
@@ -41,10 +41,10 @@ export const columns: ColumnDef<Player>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="hover:bg-accent"
+          className="hover:bg-accent text-gray-300 hover:text-white px-1 py-1 text-xs sm:text-sm sm:px-3 sm:py-2 h-auto"
         >
           Wins
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="hidden sm:block sm:ml-2 sm:h-4 sm:w-4" />
         </Button>
       );
     },
@@ -87,10 +87,10 @@ export const columns: ColumnDef<Player>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="hover:bg-accent"
+          className="hover:bg-accent text-gray-300 hover:text-white px-0 py-0 text-xs sm:text-sm sm:px-3 sm:py-2 h-auto"
         >
           Win %
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="hidden sm:block sm:ml-2 sm:h-4 sm:w-4" />
         </Button>
       );
     },

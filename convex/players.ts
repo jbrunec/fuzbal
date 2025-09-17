@@ -1,8 +1,7 @@
-import { Player } from "@/routes";
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { Id } from "convex/_generated/dataModel";
-import { AddPlayerStatisticsFormData } from "@/types";
+import { AddPlayerStatisticsFormData, Player } from "@/types";
 
 export const getPlayers = query({
   args: {},
