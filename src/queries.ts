@@ -4,6 +4,6 @@ import { api } from "convex/_generated/api";
 
 export function useUpdateStatisticsMutation() {
   console.log("inside useUpdateStatisticsMutation ");
-  const mutationFn = useConvexMutation(api.players.updateStatistics);
+  const mutationFn = useConvexMutation(api.matches.postMatch);
   return useMutation({ mutationFn });
 }

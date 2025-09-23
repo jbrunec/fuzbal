@@ -1,4 +1,5 @@
 import { AddStatisticsBtn } from "@/components/add-statistics-btn";
+import { MatchesTable } from "@/components/table/matches-table";
 import { PlayersTable } from "@/components/table/players-table";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -17,6 +18,9 @@ export const Route = createFileRoute("/")({
 
 function App() {
   const { data } = useSuspenseQuery(convexQuery(api.players.getPlayers, {}));
+  const { data: matches } = useSuspenseQuery(
+    convexQuery(api.matches.getMatches, {})
+  );
 
   return (
     <main className="flex flex-col p-0 sm:p-6 min-h-screen dark:bg-gradient-to-r dark:from-[#1b2641]  dark:to-[#56606e] dark:text-white">
@@ -24,6 +28,7 @@ function App() {
       <section className="flex flex-col gap-4 sm:max-w-6xl mx-auto items-center justify-center mt-10">
         <AddStatisticsBtn />
         <PlayersTable data={data} />
+        <MatchesTable data={matches} />
       </section>
     </main>
   );

@@ -1,4 +1,4 @@
-import { mutation, query } from "./_generated/server";
+import { internalMutation, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { Id } from "convex/_generated/dataModel";
 import { AddPlayerStatisticsFormData, Player } from "@/types";
@@ -19,7 +19,7 @@ export const getPlayer = query({
   },
 });
 
-export const updateStatistics = mutation({
+export const updateStatistics = internalMutation({
   args: {
     data: v.object({
       teamRed: v.object({

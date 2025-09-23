@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUpdateStatisticsMutation } from "@/queries";
-import { playerSchema } from "@/schemas";
+import { matchSchema } from "@/schemas";
 import { convexQuery } from "@convex-dev/react-query";
 import { AnyFieldApi, useForm } from "@tanstack/react-form";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -40,23 +40,19 @@ export function AddPlayerStatisticsForm({
 
   const form = useForm({
     defaultValues: {
-      teamRed: {
-        attacker: "",
-        defender: "",
-        goals: 0,
-      },
-      teamBlue: {
-        attacker: "",
-        defender: "",
-        goals: 0,
-      },
+      redAttacker: "",
+      redDefender: "",
+      redScore: 0,
+      blueAttacker: "",
+      blueDefender: "",
+      blueScore: 0,
     },
     validators: {
-      onChange: playerSchema,
+      onChange: matchSchema,
     },
     onSubmit: async ({ value }) => {
       console.log("onSubmit: ", value);
-      mutate({ data: value });
+      mutate(value);
     },
   });
   return (
@@ -70,7 +66,7 @@ export function AddPlayerStatisticsForm({
     >
       <div className="grid gap-4">
         <form.Field
-          name="teamRed.attacker"
+          name="redAttacker"
           validators={{
             onChange: ({ value }) => {
               console.log("validator: ", value);
@@ -97,7 +93,7 @@ export function AddPlayerStatisticsForm({
           )}
         />
         <form.Field
-          name="teamRed.defender"
+          name="redDefender"
           validators={{
             onChange: ({ value }) => {
               console.log("validator: ", value);
@@ -107,10 +103,7 @@ export function AddPlayerStatisticsForm({
           children={(field) => (
             <div className="grid gap-3">
               <Label htmlFor={field.name}>Team Red Defender</Label>
-              <Select
-                onValueChange={(value) => field.handleChange(value)}
-                required
-              >
+              <Select onValueChange={(value) => field.handleChange(value)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a player" />
                 </SelectTrigger>
@@ -127,7 +120,7 @@ export function AddPlayerStatisticsForm({
           )}
         />
         <form.Field
-          name="teamRed.goals"
+          name="redScore"
           validators={{
             onChange: ({ value }) =>
               value < 0 || value > 7
@@ -150,7 +143,7 @@ export function AddPlayerStatisticsForm({
           )}
         />
         <form.Field
-          name="teamBlue.attacker"
+          name="blueAttacker"
           validators={{
             onChange: ({ value }) => {
               console.log("validator: ", value);
@@ -177,7 +170,7 @@ export function AddPlayerStatisticsForm({
           )}
         />
         <form.Field
-          name="teamBlue.defender"
+          name="blueDefender"
           validators={{
             onChange: ({ value }) => {
               console.log("validator: ", value);
@@ -204,7 +197,7 @@ export function AddPlayerStatisticsForm({
           )}
         />
         <form.Field
-          name="teamBlue.goals"
+          name="blueScore"
           validators={{
             onChange: ({ value }) =>
               value < 0 || value > 7
