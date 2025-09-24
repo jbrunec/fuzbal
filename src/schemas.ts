@@ -20,5 +20,5 @@ export const matchSchema = z.object({
   blueAttacker: z.string().min(1, "Attacker is required"),
   blueDefender: z.string().min(1, "Defender is required"),
   blueScore: z.number().min(0),
-  _creationTime: z.date().optional(),
+  _creationTime: z.number().optional(),
 });

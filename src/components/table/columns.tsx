@@ -96,7 +96,7 @@ export const columns: ColumnDef<Player>[] = [
     },
     cell: ({ row }) => {
       const percentage = Number.parseFloat(row.getValue("winPercentage"));
-      return <div>{percentage}%</div>;
+      return <div className="text-center">{percentage}%</div>;
     },
   },
 ];

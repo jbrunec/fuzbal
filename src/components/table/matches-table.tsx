@@ -31,9 +31,10 @@ export function MatchesTable({ data }: { data: Match[] }) {
       sorting,
     },
   });
+  console.log(data);
   return (
     <>
-      <div className="overflow-x-auto rounded-md border border-gray-800 bg-gray-900">
+      <div className="rounded-md border border-gray-800 bg-gray-900">
         <Table className="sm:min-w-full">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

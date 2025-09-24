@@ -45,7 +45,7 @@ export function PlayersTable({ data }: { data: Player[] }) {
                   return (
                     <TableHead
                       key={header.id}
-                      className="text-gray-300 font-medium text-xs sm:text-sm sm:px-4 sm:py-3"
+                      className="text-gray-300 font-medium text-xs sm:text-sm sm:px-4 sm:py-3 text-center"
                     >
                       {header.isPlaceholder
                         ? null
@@ -70,7 +70,7 @@ export function PlayersTable({ data }: { data: Player[] }) {
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="text-gray-100 px-1 py-1 text-xs sm:text-sm sm:px-4 sm:py-3"
+                      className="text-gray-100 px-1 py-1 text-xs sm:text-sm sm:px-4 sm:py-3 text-center"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
