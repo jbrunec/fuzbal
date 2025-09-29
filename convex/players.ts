@@ -41,41 +41,58 @@ export const updateStatistics = internalMutation({
       args.data.teamRed.attacker as Id<"players">
     );
     player1.games += 1;
-    player1.wins += hasWon("teamRed", args.data) ? 1 : 0;
+    player1.wins += isWin("teamRed", args.data) ? 1 : 0;
     player1.winPercentage = (player1.wins / player1.games) * 100;
+    player1.streak = calculateStreak(
+      player1.streak,
+      isWin("teamRed", args.data)
+    );
 
     const player2 = await ctx.db.get(
       args.data.teamRed.defender as Id<"players">
     );
     player2.games += 1;
-    player2.wins += hasWon("teamRed", args.data) ? 1 : 0;
+    player2.wins += isWin("teamRed", args.data) ? 1 : 0;
     player2.winPercentage = (player2.wins / player2.games) * 100;
+    player2.streak = calculateStreak(
+      player2.streak,
+      isWin("teamRed", args.data)
+    );
 
     const player3 = await ctx.db.get(
       args.data.teamBlue.attacker as Id<"players">
     );
     player3.games += 1;
-    player3.wins += hasWon("teamBlue", args.data) ? 1 : 0;
+    player3.wins += isWin("teamBlue", args.data) ? 1 : 0;
     player3.winPercentage = (player3.wins / player3.games) * 100;
+    player3.streak = calculateStreak(
+      player3.streak,
+      isWin("teamBlue", args.data)
+    );
 
     const player4 = await ctx.db.get(
       args.data.teamBlue.defender as Id<"players">
     );
     player4.games += 1;
-    player4.wins += hasWon("teamBlue", args.data) ? 1 : 0;
+    player4.wins += isWin("teamBlue", args.data) ? 1 : 0;
     player4.winPercentage = (player4.wins / player4.games) * 100;
+    player4.streak = calculateStreak(
+      player4.streak,
+      isWin("teamBlue", args.data)
+    );
 
     [player1, player2, player3, player4].forEach(async (p: Player) => {
       await ctx.db.patch(p._id, {
         games: p.games,
         wins: p.wins,
         winPercentage: +p.winPercentage.toFixed(2),
+        streak: p.streak,
       });
     });
   },
 });
 
-function hasWon(
+function isWin(
   team: "teamRed" | "teamBlue",
   gameData: AddPlayerStatisticsFormData
 ) {
@@ -86,6 +103,20 @@ function hasWon(
     return gameData[team].goals > gameData["teamRed"].goals;
   }
   return false;
+}
+
+function calculateStreak(currentStreak: number, isWin: boolean) {
+  if (isWin) {
+    if (currentStreak > 0) {
+      return currentStreak++;
+    }
+    return 1;
+  } else {
+    if (currentStreak > 0) {
+      return -1;
+    }
+    return currentStreak--;
+  }
 }
 
 export const updateRating = internalMutation({

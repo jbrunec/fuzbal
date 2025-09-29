@@ -87,4 +87,27 @@ export const columns: ColumnDef<Player>[] = [
       return <div className="text-center">{rating}</div>;
     },
   },
+  {
+    accessorKey: "streak",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-accent text-gray-300 hover:text-white px-1 py-1 text-xs sm:text-sm sm:px-3 sm:py-2 h-auto"
+        >
+          Streak
+          <ArrowUpDown className="hidden sm:block sm:ml-2 sm:h-4 sm:w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const streak = row.getValue<number>("streak");
+      return streak > 0 ? (
+        <div className="text-center text-green-500">{streak}W</div>
+      ) : (
+        <div className="text-center text-red-500">{streak}L</div>
+      );
+    },
+  },
 ];

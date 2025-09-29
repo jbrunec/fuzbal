@@ -46,7 +46,7 @@ export function MatchesTable({ data }: { data: Match[] }) {
                   return (
                     <TableHead
                       key={header.id}
-                      className="text-gray-300 font-medium text-xs sm:text-sm sm:px-4 sm:py-3"
+                      className="text-gray-300 font-medium text-xs sm:text-sm sm:px-3 sm:py-2"
                     >
                       {header.isPlaceholder
                         ? null
