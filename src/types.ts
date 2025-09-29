@@ -11,6 +11,7 @@ export type Player = {
   goalsGivenAsAttacker: number;
   goalsReceivedAsDefender: number;
   winPercentage: number;
+  rating: number;
 };
 
 export type AddPlayerStatisticsFormData = z.infer<typeof playerSchema>;

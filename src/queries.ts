@@ -7,3 +7,8 @@ export function useUpdateStatisticsMutation() {
   const mutationFn = useConvexMutation(api.matches.postMatch);
   return useMutation({ mutationFn });
 }
+
+export function useRegenerateElo() {
+  const mutationFn = useConvexMutation(api.players.testUpdateRating);
+  return useMutation({ mutationFn });
+}

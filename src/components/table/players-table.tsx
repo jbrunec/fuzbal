@@ -19,7 +19,7 @@ import { Player } from "@/types";
 
 export function PlayersTable({ data }: { data: Player[] }) {
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "winPercentage", desc: true },
+    { id: "rating", desc: true },
   ]);
   const table = useReactTable({
     data,

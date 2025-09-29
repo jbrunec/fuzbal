@@ -22,12 +22,17 @@ function App() {
     convexQuery(api.matches.getMatches, {})
   );
 
+  // const { mutate } = useRegenerateElo();
+
   return (
     <main className="flex flex-col p-0 sm:p-6 min-h-screen dark:bg-gradient-to-r dark:from-[#1b2641]  dark:to-[#56606e] dark:text-white">
       <h1 className="text-center text-4xl font-bold">Fuzbal</h1>
       <section className="flex flex-col gap-4 sm:max-w-6xl sm:mx-auto sm:items-center sm:justify-center mt-10">
         <AddStatisticsBtn />
         <PlayersTable data={data} />
+        {/* <Button variant={"destructive"} onClick={async () => mutate({})}>
+          Do not click!
+        </Button> */}
         <MatchesTable data={matches} />
       </section>
     </main>

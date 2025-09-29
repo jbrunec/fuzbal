@@ -1,7 +1,8 @@
-import { internalMutation, mutation, query } from "./_generated/server";
-import { v } from "convex/values";
+import { AddPlayerStatisticsFormData, Match, Player } from "@/types";
 import { Id } from "convex/_generated/dataModel";
-import { AddPlayerStatisticsFormData, Player } from "@/types";
+import { v } from "convex/values";
+import { internalMutation, mutation, query } from "./_generated/server";
+import { internal } from "convex/_generated/api";
 
 export const getPlayers = query({
   args: {},
@@ -86,3 +87,78 @@ function hasWon(
   }
   return false;
 }
+
+export const updateRating = internalMutation({
+  args: {
+    teamRed: v.object({
+      attacker: v.string(),
+      defender: v.string(),
+      goals: v.number(),
+    }),
+    teamBlue: v.object({
+      attacker: v.string(),
+      defender: v.string(),
+      goals: v.number(),
+    }),
+  },
+  handler: async (ctx, args) => {
+    const K = 32; // adjustment factor (common values: 16, 24, 32; higher means faster rating changes)
+    const redAttacker: Player = await ctx.db.get(
+      args.teamRed.attacker as Id<"players">
+    );
+    const redDefender: Player = await ctx.db.get(
+      args.teamRed.defender as Id<"players">
+    );
+    const blueAttacker: Player = await ctx.db.get(
+      args.teamBlue.attacker as Id<"players">
+    );
+    const blueDefender: Player = await ctx.db.get(
+      args.teamBlue.defender as Id<"players">
+    );
+
+    const redTeamRating = (redAttacker.rating + redDefender.rating) / 2;
+    const blueTeamRating = (blueAttacker.rating + blueDefender.rating) / 2;
+
+    const expectedRatingRed =
+      1 / (1 + 10 ** ((blueTeamRating - redTeamRating) / 400));
+    const expectedRatingBlue = 1 - expectedRatingRed;
+
+    const actualRed = args.teamRed.goals > args.teamBlue.goals ? 1 : 0;
+    const actualBlue = 1 - actualRed;
+
+    const deltaRed = K * (actualRed - expectedRatingRed);
+    const deltaBlue = K * (actualBlue - expectedRatingBlue);
+
+    redAttacker.rating += deltaRed;
+    redDefender.rating += deltaRed;
+    blueAttacker.rating += deltaBlue;
+    blueDefender.rating += deltaBlue;
+
+    await Promise.all(
+      [redAttacker, redDefender, blueAttacker, blueDefender].map(
+        async (p: Player) => await ctx.db.patch(p._id, { rating: p.rating })
+      )
+    );
+  },
+});
+
+export const testUpdateRating = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const allMatches: Match[] = await ctx.db.query("matches").collect();
+    for (const match of allMatches) {
+      await ctx.runMutation(internal.players.updateRating, {
+        teamRed: {
+          attacker: match.redAttacker,
+          defender: match.redDefender,
+          goals: match.redScore,
+        },
+        teamBlue: {
+          attacker: match.blueAttacker,
+          defender: match.blueDefender,
+          goals: match.blueScore,
+        },
+      });
+    }
+  },
+});
