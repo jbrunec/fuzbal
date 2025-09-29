@@ -48,6 +48,18 @@ export const postMatch = mutation({
         },
       },
     }),
+      await ctx.runMutation(internal.players.updateRating, {
+        teamRed: {
+          attacker: args.redAttacker,
+          defender: args.redDefender,
+          goals: args.redScore,
+        },
+        teamBlue: {
+          attacker: args.blueAttacker,
+          defender: args.blueDefender,
+          goals: args.blueScore,
+        },
+      }),
       await ctx.db.insert("matches", {
         redAttacker: args.redAttacker,
         redDefender: args.redDefender,
