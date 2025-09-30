@@ -1,6 +1,7 @@
 import { Match } from "@/types";
 import { api, internal } from "convex/_generated/api";
 import { mutation, query } from "convex/_generated/server";
+import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 
 export const getMatches = query({
@@ -11,9 +12,37 @@ export const getMatches = query({
       map[player._id] = player.name;
       return map;
     }, {} as Record<string, string>);
-    const matches = (await ctx.db.query("matches").collect()) as Match[];
+    const matches = (await ctx.db
+      .query("matches")
+      .order("desc")
+      .collect()) as Match[];
 
     matches.map((m) => {
+      m.blueAttacker = playersMap[m.blueAttacker];
+      m.blueDefender = playersMap[m.blueDefender];
+      m.redAttacker = playersMap[m.redAttacker];
+      m.redDefender = playersMap[m.redDefender];
+    });
+
+    return matches;
+  },
+});
+
+export const getMatchesPaginated = query({
+  args: { paginationOpts: paginationOptsValidator, pageSize: v.number() },
+  handler: async (ctx, args) => {
+    const players = await ctx.runQuery(api.players.getPlayers);
+    const playersMap = players.reduce((map, player) => {
+      map[player._id] = player.name;
+      return map;
+    }, {} as Record<string, string>);
+    console.log("pagination OPTS: ", args.paginationOpts);
+    const matches = await ctx.db
+      .query("matches")
+      .order("desc")
+      .paginate(args.paginationOpts);
+
+    matches.page.map((m) => {
       m.blueAttacker = playersMap[m.blueAttacker];
       m.blueDefender = playersMap[m.blueDefender];
       m.redAttacker = playersMap[m.redAttacker];

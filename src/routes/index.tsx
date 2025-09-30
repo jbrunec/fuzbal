@@ -18,10 +18,9 @@ export const Route = createFileRoute("/")({
 
 function App() {
   const { data } = useSuspenseQuery(convexQuery(api.players.getPlayers, {}));
-  const { data: matches } = useSuspenseQuery(
+  const { data: results } = useSuspenseQuery(
     convexQuery(api.matches.getMatches, {})
   );
-
   // const { mutate } = useRegenerateElo();
 
   return (
@@ -33,7 +32,7 @@ function App() {
         {/* <Button variant={"destructive"} onClick={async () => mutate({})}>
           Do not click!
         </Button> */}
-        <MatchesTable data={matches} />
+        <MatchesTable data={results} />
       </section>
     </main>
   );

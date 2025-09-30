@@ -65,6 +65,7 @@ export const columns: ColumnDef<Match>[] = [
         </div>
       );
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "redAttacker",
@@ -126,6 +127,7 @@ export const columns: ColumnDef<Match>[] = [
         </div>
       );
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "_creationTime",

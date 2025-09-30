@@ -1,3 +1,11 @@
+import { Input } from "@/components/ui/input";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import {
   Table,
   TableBody,
@@ -10,7 +18,10 @@ import { Match } from "@/types";
 import {
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
+  PaginationState,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
@@ -21,19 +32,38 @@ export function MatchesTable({ data }: { data: Match[] }) {
   const [sorting, setSorting] = useState<SortingState>([
     { id: "_creationTime", desc: true },
   ]);
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState<any>([]);
   const table = useReactTable({
     data,
     columns,
+    filterFns: {},
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: "includesString",
+    onPaginationChange: setPagination,
+    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
+      pagination,
+      globalFilter,
     },
   });
   console.log(data);
+  console.log(table.getFilteredRowModel().rows);
   return (
     <>
+      <Input
+        onChange={(e) => setGlobalFilter(e.target.value)}
+        placeholder="Search by player..."
+      />
       <div className="rounded-md border border-gray-800 bg-gray-900">
         <Table className="sm:min-w-full">
           <TableHeader>
@@ -94,6 +124,31 @@ export function MatchesTable({ data }: { data: Match[] }) {
           </TableBody>
         </Table>
       </div>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            {table.getCanPreviousPage() && (
+              <PaginationPrevious
+                onClick={() => table.previousPage()}
+                className="border"
+              />
+            )}
+          </PaginationItem>
+          <PaginationItem>
+            Page {table.getState().pagination.pageIndex + 1} of{" "}
+            {table.getPageCount().toLocaleString()}
+          </PaginationItem>
+          <PaginationItem>
+            {table.getCanNextPage() && (
+              <PaginationNext
+                onClick={() => table.nextPage()}
+                className="border"
+              />
+            )}
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+      <div>Games: {table.getRowCount()}</div>
     </>
   );
 }

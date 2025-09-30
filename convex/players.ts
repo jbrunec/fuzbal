@@ -108,14 +108,14 @@ function isWin(
 function calculateStreak(currentStreak: number, isWin: boolean) {
   if (isWin) {
     if (currentStreak > 0) {
-      return currentStreak++;
+      return currentStreak + 1;
     }
     return 1;
   } else {
     if (currentStreak > 0) {
       return -1;
     }
-    return currentStreak--;
+    return currentStreak - 1;
   }
 }
 
