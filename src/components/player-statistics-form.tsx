@@ -14,6 +14,7 @@ import { convexQuery } from "@convex-dev/react-query";
 import { AnyFieldApi, useForm } from "@tanstack/react-form";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
+import { useState } from "react";
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
@@ -37,6 +38,14 @@ export function AddPlayerStatisticsForm({
   const { data: players } = useSuspenseQuery(
     convexQuery(api.players.getPlayers, {})
   );
+  const [playerSelectOptions, setPlayerSelectOptions] = useState(() =>
+    players.map((p) => ({
+      id: p._id,
+      label: p.name,
+      selected: false,
+      selector: "",
+    }))
+  );
 
   const form = useForm({
     defaultValues: {
@@ -55,6 +64,8 @@ export function AddPlayerStatisticsForm({
       mutate(value);
     },
   });
+
+  console.log("options: ", playerSelectOptions);
   return (
     <form
       onSubmit={(e) => {
@@ -73,6 +84,26 @@ export function AddPlayerStatisticsForm({
               return !value ? "Player required!" : undefined;
             },
           }}
+          listeners={{
+            onChange: ({ value, fieldApi }) => {
+              setPlayerSelectOptions(
+                playerSelectOptions.map((p) => {
+                  if (p.id === value && p.selector === fieldApi.name) {
+                    p.selector = "";
+                    p.selected = false;
+                  } else if (p.id === value && p.selector !== fieldApi.name) {
+                    p.selector = fieldApi.name;
+                    p.selected = true;
+                  } else if (p.id !== value && p.selector === fieldApi.name) {
+                    p.selector = "";
+                    p.selected = false;
+                  }
+
+                  return p;
+                })
+              );
+            },
+          }}
           children={(field) => (
             <div className="grid gap-3">
               <Label htmlFor={field.name}>Team Red Attacker</Label>
@@ -81,9 +112,13 @@ export function AddPlayerStatisticsForm({
                   <SelectValue placeholder="Select a player" />
                 </SelectTrigger>
                 <SelectContent>
-                  {players.map((player) => (
-                    <SelectItem key={player._id} value={player._id}>
-                      {player.name}
+                  {playerSelectOptions.map((player) => (
+                    <SelectItem
+                      key={player.id}
+                      value={player.id}
+                      disabled={player.selected}
+                    >
+                      {player.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -96,8 +131,27 @@ export function AddPlayerStatisticsForm({
           name="redDefender"
           validators={{
             onChange: ({ value }) => {
-              console.log("validator: ", value);
               return !value ? "there is a value" : undefined;
+            },
+          }}
+          listeners={{
+            onChange: ({ value, fieldApi }) => {
+              setPlayerSelectOptions(
+                playerSelectOptions.map((p) => {
+                  if (p.id === value && p.selector === fieldApi.name) {
+                    p.selector = "";
+                    p.selected = false;
+                  } else if (p.id === value && p.selector !== fieldApi.name) {
+                    p.selector = fieldApi.name;
+                    p.selected = true;
+                  } else if (p.id !== value && p.selector === fieldApi.name) {
+                    p.selector = "";
+                    p.selected = false;
+                  }
+
+                  return p;
+                })
+              );
             },
           }}
           children={(field) => (
@@ -108,9 +162,13 @@ export function AddPlayerStatisticsForm({
                   <SelectValue placeholder="Select a player" />
                 </SelectTrigger>
                 <SelectContent>
-                  {players.map((player) => (
-                    <SelectItem key={player._id} value={player._id}>
-                      {player.name}
+                  {playerSelectOptions.map((player) => (
+                    <SelectItem
+                      key={player.id}
+                      value={player.id}
+                      disabled={player.selected}
+                    >
+                      {player.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -150,6 +208,26 @@ export function AddPlayerStatisticsForm({
               return !value ? "there is a value" : undefined;
             },
           }}
+          listeners={{
+            onChange: ({ value, fieldApi }) => {
+              setPlayerSelectOptions(
+                playerSelectOptions.map((p) => {
+                  if (p.id === value && p.selector === fieldApi.name) {
+                    p.selector = "";
+                    p.selected = false;
+                  } else if (p.id === value && p.selector !== fieldApi.name) {
+                    p.selector = fieldApi.name;
+                    p.selected = true;
+                  } else if (p.id !== value && p.selector === fieldApi.name) {
+                    p.selector = "";
+                    p.selected = false;
+                  }
+
+                  return p;
+                })
+              );
+            },
+          }}
           children={(field) => (
             <div className="grid gap-3">
               <Label htmlFor={field.name}>Team Blue Attacker</Label>
@@ -158,9 +236,13 @@ export function AddPlayerStatisticsForm({
                   <SelectValue placeholder="Select a player" />
                 </SelectTrigger>
                 <SelectContent>
-                  {players.map((player) => (
-                    <SelectItem key={player._id} value={player._id}>
-                      {player.name}
+                  {playerSelectOptions.map((player) => (
+                    <SelectItem
+                      key={player.id}
+                      value={player.id}
+                      disabled={player.selected}
+                    >
+                      {player.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -173,8 +255,27 @@ export function AddPlayerStatisticsForm({
           name="blueDefender"
           validators={{
             onChange: ({ value }) => {
-              console.log("validator: ", value);
               return !value ? "there is a value" : undefined;
+            },
+          }}
+          listeners={{
+            onChange: ({ value, fieldApi }) => {
+              setPlayerSelectOptions(
+                playerSelectOptions.map((p) => {
+                  if (p.id === value && p.selector === fieldApi.name) {
+                    p.selector = "";
+                    p.selected = false;
+                  } else if (p.id === value && p.selector !== fieldApi.name) {
+                    p.selector = fieldApi.name;
+                    p.selected = true;
+                  } else if (p.id !== value && p.selector === fieldApi.name) {
+                    p.selector = "";
+                    p.selected = false;
+                  }
+
+                  return p;
+                })
+              );
             },
           }}
           children={(field) => (
@@ -185,9 +286,13 @@ export function AddPlayerStatisticsForm({
                   <SelectValue placeholder="Select a player" />
                 </SelectTrigger>
                 <SelectContent>
-                  {players.map((player) => (
-                    <SelectItem key={player._id} value={player._id}>
-                      {player.name}
+                  {playerSelectOptions.map((player) => (
+                    <SelectItem
+                      key={player.id}
+                      value={player.id}
+                      disabled={player.selected}
+                    >
+                      {player.label}
                     </SelectItem>
                   ))}
                 </SelectContent>

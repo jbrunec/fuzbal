@@ -56,8 +56,6 @@ export function MatchesTable({ data }: { data: Match[] }) {
       globalFilter,
     },
   });
-  console.log(data);
-  console.log(table.getFilteredRowModel().rows);
   return (
     <>
       <Input

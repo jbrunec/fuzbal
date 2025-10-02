@@ -1,9 +1,9 @@
-import { matchSchema, playerSchema } from "@/schemas";
+import { playerSchema } from "@/schemas";
 import { Id } from "convex/_generated/dataModel";
 import z from "zod";
 
 export type Player = {
-  _id: Id<string>;
+  _id: Id<"players">;
   name: string;
   games: number;
   wins: number;
@@ -16,4 +16,13 @@ export type Player = {
 };
 
 export type AddPlayerStatisticsFormData = z.infer<typeof playerSchema>;
-export type Match = z.infer<typeof matchSchema>;
+export type Match = {
+  _id: Id<"matches">;
+  redAttacker: string;
+  redDefender: string;
+  redScore: number;
+  blueAttacker: string;
+  blueDefender: string;
+  blueScore: number;
+  _creationTime: number;
+};

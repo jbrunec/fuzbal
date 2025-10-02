@@ -3,12 +3,12 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 
 export function useUpdateStatisticsMutation() {
-  console.log("inside useUpdateStatisticsMutation ");
   const mutationFn = useConvexMutation(api.matches.postMatch);
   return useMutation({ mutationFn });
 }
 
-export function useRegenerateElo() {
-  const mutationFn = useConvexMutation(api.players.testUpdateRating);
+// one off fallback function in case you mess up the data somehow
+export function useRegeneratePlayerStatistic() {
+  const mutationFn = useConvexMutation(api.players.regenerateStatistic);
   return useMutation({ mutationFn });
 }

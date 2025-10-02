@@ -1,6 +1,8 @@
 import { AddStatisticsBtn } from "@/components/add-statistics-btn";
 import { MatchesTable } from "@/components/table/matches-table";
 import { PlayersTable } from "@/components/table/players-table";
+import { Button } from "@/components/ui/button";
+import { useRegeneratePlayerStatistic } from "@/queries";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -21,7 +23,7 @@ function App() {
   const { data: results } = useSuspenseQuery(
     convexQuery(api.matches.getMatches, {})
   );
-  // const { mutate } = useRegenerateElo();
+  // const { mutate } = useRegeneratePlayerStatistic();
 
   return (
     <main className="flex flex-col p-0 sm:p-6 min-h-screen dark:bg-gradient-to-r dark:from-[#1b2641]  dark:to-[#56606e] dark:text-white">

@@ -173,23 +173,65 @@ export const updateRating = internalMutation({
   },
 });
 
-export const testUpdateRating = mutation({
+export const regenerateRating = internalMutation({
+  args: {
+    _id: v.id("matches"),
+    redAttacker: v.string(),
+    redDefender: v.string(),
+    redScore: v.number(),
+    blueAttacker: v.string(),
+    blueDefender: v.string(),
+    blueScore: v.number(),
+    _creationTime: v.number(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.runMutation(internal.players.updateRating, {
+      teamRed: {
+        attacker: args.redAttacker,
+        defender: args.redDefender,
+        goals: args.redScore,
+      },
+      teamBlue: {
+        attacker: args.blueAttacker,
+        defender: args.blueDefender,
+        goals: args.blueScore,
+      },
+    });
+  },
+});
+
+export const regenerateStatistic = mutation({
   args: {},
   handler: async (ctx) => {
     const allMatches: Match[] = await ctx.db.query("matches").collect();
+    const allPlayers: Player[] = await ctx.db.query("players").collect();
+
+    for (const player of allPlayers) {
+      await ctx.db.patch(player._id, {
+        rating: 1500,
+        games: 0,
+        wins: 0,
+        winPercentage: 0,
+        streak: 0,
+      });
+    }
+
     for (const match of allMatches) {
-      await ctx.runMutation(internal.players.updateRating, {
-        teamRed: {
-          attacker: match.redAttacker,
-          defender: match.redDefender,
-          goals: match.redScore,
-        },
-        teamBlue: {
-          attacker: match.blueAttacker,
-          defender: match.blueDefender,
-          goals: match.blueScore,
+      await ctx.runMutation(internal.players.updateStatistics, {
+        data: {
+          teamRed: {
+            attacker: match.redAttacker,
+            defender: match.redDefender,
+            goals: match.redScore,
+          },
+          teamBlue: {
+            attacker: match.blueAttacker,
+            defender: match.blueDefender,
+            goals: match.blueScore,
+          },
         },
       });
+      await ctx.runMutation(internal.players.regenerateRating, match);
     }
   },
 });
