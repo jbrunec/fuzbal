@@ -27,6 +27,10 @@ export function PlayersTable({
   const [sorting, setSorting] = useState<SortingState>([
     { id: "rating", desc: true },
   ]);
+  const columnVisibility = !detailed
+    ? { games: false, wins: false }
+    : { games: true, wins: true };
+
   const table = useReactTable({
     data,
     columns,
@@ -35,6 +39,7 @@ export function PlayersTable({
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
+      columnVisibility,
     },
   });
   return (
@@ -48,6 +53,10 @@ export function PlayersTable({
                 className="border-gray-800 hover:bg-gray-800/50"
               >
                 {headerGroup.headers.map((header) => {
+                  console.log("this is header: ", header);
+                  // if (header.id === "games") {
+                  //   return;
+                  // }
                   return (
                     <TableHead
                       key={header.id}

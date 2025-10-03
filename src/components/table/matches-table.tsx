@@ -28,7 +28,13 @@ import {
 import { useState } from "react";
 import { columns } from "./match-columns";
 
-export function MatchesTable({ data }: { data: Match[] }) {
+export function MatchesTable({
+  data,
+  detailed,
+}: {
+  data: Match[];
+  detailed?: boolean;
+}) {
   const [sorting, setSorting] = useState<SortingState>([
     { id: "_creationTime", desc: true },
   ]);
@@ -36,7 +42,6 @@ export function MatchesTable({ data }: { data: Match[] }) {
     pageIndex: 0,
     pageSize: 10,
   });
-  // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
   const table = useReactTable({
     data,
@@ -61,6 +66,7 @@ export function MatchesTable({ data }: { data: Match[] }) {
       <Input
         onChange={(e) => setGlobalFilter(e.target.value)}
         placeholder="Search by player..."
+        className="placeholder:text-white"
       />
       <div className="rounded-md border border-gray-800 bg-gray-900">
         <Table className="sm:min-w-full">
@@ -122,31 +128,35 @@ export function MatchesTable({ data }: { data: Match[] }) {
           </TableBody>
         </Table>
       </div>
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            {table.getCanPreviousPage() && (
-              <PaginationPrevious
-                onClick={() => table.previousPage()}
-                className="border"
-              />
-            )}
-          </PaginationItem>
-          <PaginationItem>
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount().toLocaleString()}
-          </PaginationItem>
-          <PaginationItem>
-            {table.getCanNextPage() && (
-              <PaginationNext
-                onClick={() => table.nextPage()}
-                className="border"
-              />
-            )}
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-      <div>Games: {table.getRowCount()}</div>
+      {detailed && (
+        <>
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                {table.getCanPreviousPage() && (
+                  <PaginationPrevious
+                    onClick={() => table.previousPage()}
+                    className="border"
+                  />
+                )}
+              </PaginationItem>
+              <PaginationItem>
+                Page {table.getState().pagination.pageIndex + 1} of{" "}
+                {table.getPageCount().toLocaleString()}
+              </PaginationItem>
+              <PaginationItem>
+                {table.getCanNextPage() && (
+                  <PaginationNext
+                    onClick={() => table.nextPage()}
+                    className="border"
+                  />
+                )}
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+          <div>Games: {table.getRowCount()}</div>
+        </>
+      )}
     </>
   );
 }
