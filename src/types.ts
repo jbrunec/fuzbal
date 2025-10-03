@@ -13,6 +13,7 @@ export type Player = {
   winPercentage: number;
   rating: number;
   streak: number;
+  lastPlayed?: number;
 };
 
 export type AddPlayerStatisticsFormData = z.infer<typeof playerSchema>;

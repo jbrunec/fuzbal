@@ -15,7 +15,7 @@ export const getPlayer = query({
   args: {
     id: v.id("players"),
   },
-  handler: async (ctx, args): Promise<Player> => {
+  handler: async (ctx, args): Promise<Player | null> => {
     return await ctx.db.get(args.id);
   },
 });
@@ -36,10 +36,11 @@ export const updateStatistics = internalMutation({
     }),
   },
   handler: async (ctx, args) => {
-    console.log("inside Mutation: ", args);
-    const player1: Player = await ctx.db.get(
+    const matchDate = Date.now();
+    const player1: Player | null = await ctx.db.get(
       args.data.teamRed.attacker as Id<"players">
     );
+    if (!player1) return;
     player1.games += 1;
     player1.wins += isWin("teamRed", args.data) ? 1 : 0;
     player1.winPercentage = (player1.wins / player1.games) * 100;
@@ -47,10 +48,12 @@ export const updateStatistics = internalMutation({
       player1.streak,
       isWin("teamRed", args.data)
     );
+    player1.lastPlayed = matchDate;
 
     const player2 = await ctx.db.get(
       args.data.teamRed.defender as Id<"players">
     );
+    if (!player2) return;
     player2.games += 1;
     player2.wins += isWin("teamRed", args.data) ? 1 : 0;
     player2.winPercentage = (player2.wins / player2.games) * 100;
@@ -58,10 +61,12 @@ export const updateStatistics = internalMutation({
       player2.streak,
       isWin("teamRed", args.data)
     );
+    player2.lastPlayed = matchDate;
 
     const player3 = await ctx.db.get(
       args.data.teamBlue.attacker as Id<"players">
     );
+    if (!player3) return;
     player3.games += 1;
     player3.wins += isWin("teamBlue", args.data) ? 1 : 0;
     player3.winPercentage = (player3.wins / player3.games) * 100;
@@ -69,10 +74,12 @@ export const updateStatistics = internalMutation({
       player3.streak,
       isWin("teamBlue", args.data)
     );
+    player3.lastPlayed = matchDate;
 
     const player4 = await ctx.db.get(
       args.data.teamBlue.defender as Id<"players">
     );
+    if (!player4) return;
     player4.games += 1;
     player4.wins += isWin("teamBlue", args.data) ? 1 : 0;
     player4.winPercentage = (player4.wins / player4.games) * 100;
@@ -80,6 +87,7 @@ export const updateStatistics = internalMutation({
       player4.streak,
       isWin("teamBlue", args.data)
     );
+    player4.lastPlayed = matchDate;
 
     [player1, player2, player3, player4].forEach(async (p: Player) => {
       await ctx.db.patch(p._id, {
@@ -87,6 +95,7 @@ export const updateStatistics = internalMutation({
         wins: p.wins,
         winPercentage: +p.winPercentage.toFixed(2),
         streak: p.streak,
+        lastPlayed: p.lastPlayed,
       });
     });
   },
@@ -134,18 +143,28 @@ export const updateRating = internalMutation({
   },
   handler: async (ctx, args) => {
     const K = 32; // adjustment factor (common values: 16, 24, 32; higher means faster rating changes)
-    const redAttacker: Player = await ctx.db.get(
+    const redAttacker: Player | null = await ctx.db.get(
       args.teamRed.attacker as Id<"players">
     );
-    const redDefender: Player = await ctx.db.get(
+    const redDefender: Player | null = await ctx.db.get(
       args.teamRed.defender as Id<"players">
     );
-    const blueAttacker: Player = await ctx.db.get(
+    const blueAttacker: Player | null = await ctx.db.get(
       args.teamBlue.attacker as Id<"players">
     );
-    const blueDefender: Player = await ctx.db.get(
+    const blueDefender: Player | null = await ctx.db.get(
       args.teamBlue.defender as Id<"players">
     );
+
+    if (!redAttacker) return;
+    if (!redDefender) return;
+    if (!blueAttacker) return;
+    if (!blueDefender) return;
+
+    applyDecay(redAttacker);
+    applyDecay(redDefender);
+    applyDecay(blueAttacker);
+    applyDecay(blueDefender);
 
     const redTeamRating = (redAttacker.rating + redDefender.rating) / 2;
     const blueTeamRating = (blueAttacker.rating + blueDefender.rating) / 2;
@@ -235,3 +254,14 @@ export const regenerateStatistic = mutation({
     }
   },
 });
+
+function applyDecay(player: Player, decayPercent = 0.02) {
+  if (!player.lastPlayed) return;
+
+  const weeksInactive = Math.floor(Date.now() - player.lastPlayed);
+  if (weeksInactive > 0) {
+    player.rating = player.rating * Math.pow(1 - decayPercent, weeksInactive);
+  }
+
+  player.lastPlayed = Date.now();
+}

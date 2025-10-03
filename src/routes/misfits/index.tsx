@@ -1,15 +1,13 @@
 import { AddStatisticsBtn } from "@/components/add-statistics-btn";
 import { MatchesTable } from "@/components/table/matches-table";
 import { PlayersTable } from "@/components/table/players-table";
-import { Button } from "@/components/ui/button";
-import { useRegeneratePlayerStatistic } from "@/queries";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 
-export const Route = createFileRoute("/")({
-  component: App,
+export const Route = createFileRoute("/misfits/")({
+  component: RouteComponent,
   pendingComponent: () => <>Loading!</>,
   errorComponent: () => <>ERROR</>,
   notFoundComponent: () => <>not found</>,
@@ -18,13 +16,11 @@ export const Route = createFileRoute("/")({
   },
 });
 
-function App() {
+function RouteComponent() {
   const { data } = useSuspenseQuery(convexQuery(api.players.getPlayers, {}));
   const { data: results } = useSuspenseQuery(
     convexQuery(api.matches.getMatches, {})
   );
-  // const { mutate } = useRegeneratePlayerStatistic();
-
   return (
     <main className="flex flex-col">
       <h1 className="text-center text-4xl font-bold">Fuzbal</h1>
@@ -32,8 +28,8 @@ function App() {
         <AddStatisticsBtn />
         <PlayersTable data={data} />
         {/* <Button variant={"destructive"} onClick={async () => mutate({})}>
-          Do not click!
-        </Button> */}
+      Do not click!
+    </Button> */}
         <MatchesTable data={results} />
       </section>
     </main>

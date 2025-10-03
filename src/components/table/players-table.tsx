@@ -17,7 +17,13 @@ import { useState } from "react";
 import { columns } from "./columns";
 import { Player } from "@/types";
 
-export function PlayersTable({ data }: { data: Player[] }) {
+export function PlayersTable({
+  data,
+  detailed,
+}: {
+  data: Player[];
+  detailed?: boolean;
+}) {
   const [sorting, setSorting] = useState<SortingState>([
     { id: "rating", desc: true },
   ]);
