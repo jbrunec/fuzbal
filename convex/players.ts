@@ -161,10 +161,10 @@ export const updateRating = internalMutation({
     if (!blueAttacker) return;
     if (!blueDefender) return;
 
-    applyDecay(redAttacker);
-    applyDecay(redDefender);
-    applyDecay(blueAttacker);
-    applyDecay(blueDefender);
+    // applyDecay(redAttacker);
+    // applyDecay(redDefender);
+    // applyDecay(blueAttacker);
+    // applyDecay(blueDefender);
 
     const redTeamRating = (redAttacker.rating + redDefender.rating) / 2;
     const blueTeamRating = (blueAttacker.rating + blueDefender.rating) / 2;
@@ -232,6 +232,7 @@ export const regenerateStatistic = mutation({
         wins: 0,
         winPercentage: 0,
         streak: 0,
+        lastPlayed: Date.now(),
       });
     }
 
@@ -260,8 +261,10 @@ function applyDecay(player: Player, decayPercent = 0.02) {
 
   const weeksInactive = Math.floor(Date.now() - player.lastPlayed);
   if (weeksInactive > 0) {
-    player.rating = player.rating * Math.pow(1 - decayPercent, weeksInactive);
+    console.log(
+      "decay update: ",
+      player.rating * Math.pow(1 - decayPercent, weeksInactive)
+    );
+    // player.rating = player.rating * Math.pow(1 - decayPercent, weeksInactive);
   }
-
-  player.lastPlayed = Date.now();
 }
