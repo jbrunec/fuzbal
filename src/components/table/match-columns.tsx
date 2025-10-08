@@ -6,21 +6,6 @@ import { ArrowUpDown } from "lucide-react";
 
 export const columns: ColumnDef<Match>[] = [
   {
-    accessorKey: "blueAttacker",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="hover:bg-accent text-gray-300 hover:text-white px-1 py-1 text-xs sm:text-sm sm:px-3 sm:py-2 h-auto"
-        >
-          Blue A.
-          <ArrowUpDown className="hidden sm:block sm:ml-2 sm:h-4 sm:w-4" />
-        </Button>
-      );
-    },
-  },
-  {
     accessorKey: "blueDefender",
     header: ({ column }) => {
       return (
@@ -30,6 +15,21 @@ export const columns: ColumnDef<Match>[] = [
           className="hover:bg-accent text-gray-300 hover:text-white px-1 py-1 text-xs sm:text-sm sm:px-3 sm:py-2 h-auto"
         >
           Blue D.
+          <ArrowUpDown className="hidden sm:block sm:ml-2 sm:h-4 sm:w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "blueAttacker",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-accent text-gray-300 hover:text-white px-1 py-1 text-xs sm:text-sm sm:px-3 sm:py-2 h-auto"
+        >
+          Blue A.
           <ArrowUpDown className="hidden sm:block sm:ml-2 sm:h-4 sm:w-4" />
         </Button>
       );
@@ -54,7 +54,7 @@ export const columns: ColumnDef<Match>[] = [
         <div
           className={cn(
             {
-              "bg-green-800":
+              "bg-blue-700":
                 row.getValue<number>("blueScore") >
                 row.getValue<number>("redScore"),
             },
@@ -62,6 +62,38 @@ export const columns: ColumnDef<Match>[] = [
           )}
         >
           {row.getValue("blueScore")}
+        </div>
+      );
+    },
+    enableColumnFilter: false,
+  },
+  {
+    accessorKey: "redScore",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-accent text-gray-300 hover:text-white px-1 py-1 text-xs sm:text-sm sm:px-3 sm:py-2 h-auto"
+        >
+          Red Score
+          <ArrowUpDown className="hidden sm:block sm:ml-2 sm:h-4 sm:w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return (
+        <div
+          className={cn(
+            {
+              "bg-red-800":
+                row.getValue<number>("blueScore") <
+                row.getValue<number>("redScore"),
+            },
+            "text-center"
+          )}
+        >
+          {row.getValue("redScore")}
         </div>
       );
     },
@@ -97,38 +129,7 @@ export const columns: ColumnDef<Match>[] = [
       );
     },
   },
-  {
-    accessorKey: "redScore",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="hover:bg-accent text-gray-300 hover:text-white px-1 py-1 text-xs sm:text-sm sm:px-3 sm:py-2 h-auto"
-        >
-          Red Score
-          <ArrowUpDown className="hidden sm:block sm:ml-2 sm:h-4 sm:w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <div
-          className={cn(
-            {
-              "bg-green-800":
-                row.getValue<number>("blueScore") <
-                row.getValue<number>("redScore"),
-            },
-            "text-center"
-          )}
-        >
-          {row.getValue("redScore")}
-        </div>
-      );
-    },
-    enableColumnFilter: false,
-  },
+
   {
     accessorKey: "_creationTime",
     header: ({ column }) => {

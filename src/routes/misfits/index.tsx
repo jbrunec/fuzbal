@@ -26,8 +26,8 @@ function RouteComponent() {
   // const { mutate } = useRegeneratePlayerStatistic();
   return (
     <main className="flex flex-col">
-      <h1 className="text-center text-4xl font-bold">Fuzbal</h1>
-      <section className="flex flex-col gap-4 sm:max-w-6xl sm:mx-auto sm:items-center sm:justify-center mt-10">
+      <h1 className="text-center text-4xl font-bold text-white">Fuzbal</h1>
+      <section className="flex flex-col gap-4 sm:max-w-6xl sm:mx-auto sm:items-center sm:justify-center my-10">
         <AddStatisticsBtn />
         <PlayersTable data={data} detailed={true} />
         {/* <Button variant={"destructive"} onClick={async () => mutate({})}>

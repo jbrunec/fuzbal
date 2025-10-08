@@ -27,6 +27,16 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { columns } from "./match-columns";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectValue,
+  SelectItem,
+  SelectLabel,
+  SelectGroup,
+} from "@/components/ui/select";
 
 export function MatchesTable({
   data,
@@ -148,9 +158,41 @@ export function MatchesTable({
                 {table.getCanNextPage() && (
                   <PaginationNext
                     onClick={() => table.nextPage()}
-                    className="border"
+                    className=" bg-white/50"
                   />
                 )}
+              </PaginationItem>
+              <PaginationItem>
+                {
+                  <Select
+                    onValueChange={(value) =>
+                      setPagination({
+                        pageIndex: 0,
+                        pageSize: value === "all" ? data.length : Number(value),
+                      })
+                    }
+                  >
+                    <SelectTrigger className="bg-white/70 text-white">
+                      <SelectValue placeholder="Show" />
+                    </SelectTrigger>
+                    <SelectContent className="">
+                      <SelectGroup>
+                        <SelectItem key={"10"} value={"10"}>
+                          10
+                        </SelectItem>
+                        <SelectItem key={"20"} value={"20"}>
+                          20
+                        </SelectItem>
+                        <SelectItem key={"30"} value={"30"}>
+                          30
+                        </SelectItem>
+                        <SelectItem key={"all"} value={"all"}>
+                          All
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                }
               </PaginationItem>
             </PaginationContent>
           </Pagination>
