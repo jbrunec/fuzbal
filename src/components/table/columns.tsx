@@ -1,9 +1,16 @@
 import { Button } from "@/components/ui/button";
-import { Player } from "@/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { PlayerModel } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
-export const columns: ColumnDef<Player>[] = [
+export const columns: ColumnDef<PlayerModel>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -108,6 +115,28 @@ export const columns: ColumnDef<Player>[] = [
       ) : (
         <div className="text-center text-red-500">{streak}L</div>
       );
+    },
+  },
+  {
+    id: "actions",
+    header: ({ column }) => {
+      return <span>Actions</span>;
+    },
+    cell: ({ row }) => {
+      return (
+        <Dialog>
+          <DialogTrigger>
+            <Button variant={"outline"}>Stats</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Additional Stats</DialogTitle>
+            </DialogHeader>
+            <div className="flex items-center gap-2">this is content</div>
+          </DialogContent>
+        </Dialog>
+      );
+      // return <Button variant={"outline"} onClick={() => }>Stats</Button>;
     },
   },
 ];

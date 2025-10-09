@@ -2,7 +2,10 @@ import { AddStatisticsBtn } from "@/components/add-statistics-btn";
 import { MatchesTable } from "@/components/table/matches-table";
 import { PlayersTable } from "@/components/table/players-table";
 import { Button } from "@/components/ui/button";
-import { useRegeneratePlayerStatistic } from "@/queries";
+import {
+  useRegenerateAttAndDef,
+  useRegeneratePlayerStatistic,
+} from "@/queries";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -24,6 +27,7 @@ function RouteComponent() {
     convexQuery(api.matches.getMatches, {})
   );
   // const { mutate } = useRegeneratePlayerStatistic();
+  // const { mutate } = useRegenerateAttAndDef();
   return (
     <main className="flex flex-col">
       <h1 className="text-center text-4xl font-bold text-white">Fuzbal</h1>

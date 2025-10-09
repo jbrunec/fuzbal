@@ -12,3 +12,9 @@ export function useRegeneratePlayerStatistic() {
   const mutationFn = useConvexMutation(api.players.regenerateStatistic);
   return useMutation({ mutationFn });
 }
+
+// one off fallback function in case you mess up the data somehow
+export function useRegenerateAttAndDef() {
+  const mutationFn = useConvexMutation(api.players.regenerateAttAndDef);
+  return useMutation({ mutationFn });
+}

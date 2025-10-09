@@ -1,4 +1,9 @@
-import { AddPlayerStatisticsFormData, Match, Player } from "@/types";
+import {
+  AddPlayerStatisticsFormData,
+  Match,
+  Player,
+  PlayerModel,
+} from "@/types";
 import { Id } from "convex/_generated/dataModel";
 import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
@@ -6,7 +11,7 @@ import { internal } from "convex/_generated/api";
 
 export const getPlayers = query({
   args: {},
-  handler: async (ctx): Promise<Player[]> => {
+  handler: async (ctx) => {
     return await ctx.db.query("players").collect();
   },
 });
@@ -15,7 +20,7 @@ export const getPlayer = query({
   args: {
     id: v.id("players"),
   },
-  handler: async (ctx, args): Promise<Player | null> => {
+  handler: async (ctx, args) => {
     return await ctx.db.get(args.id);
   },
 });
@@ -37,7 +42,7 @@ export const updateStatistics = internalMutation({
   },
   handler: async (ctx, args) => {
     const matchDate = Date.now();
-    const player1: Player | null = await ctx.db.get(
+    const player1 = await ctx.db.get(
       args.data.teamRed.attacker as Id<"players">
     );
     if (!player1) return;
@@ -49,6 +54,7 @@ export const updateStatistics = internalMutation({
       isWin("teamRed", args.data)
     );
     player1.lastPlayed = matchDate;
+    updatePositionStat(player1, args.data);
 
     const player2 = await ctx.db.get(
       args.data.teamRed.defender as Id<"players">
@@ -62,6 +68,7 @@ export const updateStatistics = internalMutation({
       isWin("teamRed", args.data)
     );
     player2.lastPlayed = matchDate;
+    updatePositionStat(player2, args.data);
 
     const player3 = await ctx.db.get(
       args.data.teamBlue.attacker as Id<"players">
@@ -75,6 +82,7 @@ export const updateStatistics = internalMutation({
       isWin("teamBlue", args.data)
     );
     player3.lastPlayed = matchDate;
+    updatePositionStat(player3, args.data);
 
     const player4 = await ctx.db.get(
       args.data.teamBlue.defender as Id<"players">
@@ -88,8 +96,9 @@ export const updateStatistics = internalMutation({
       isWin("teamBlue", args.data)
     );
     player4.lastPlayed = matchDate;
+    updatePositionStat(player4, args.data);
 
-    [player1, player2, player3, player4].forEach(async (p: Player) => {
+    [player1, player2, player3, player4].forEach(async (p) => {
       await ctx.db.patch(p._id, {
         games: p.games,
         wins: p.wins,
@@ -100,6 +109,34 @@ export const updateStatistics = internalMutation({
     });
   },
 });
+
+function updatePositionStat(
+  player: PlayerModel,
+  matchData: {
+    teamRed: {
+      attacker: string;
+      defender: string;
+    };
+    teamBlue: {
+      attacker: string;
+      defender: string;
+    };
+  }
+) {
+  if (!player.asAtt || !player.asDef) return;
+  if (
+    matchData.teamBlue.attacker === player._id ||
+    matchData.teamRed.attacker === player._id
+  ) {
+    player.asAtt += 1;
+  }
+  if (
+    matchData.teamBlue.defender === player._id ||
+    matchData.teamRed.defender === player._id
+  ) {
+    player.asDef += 1;
+  }
+}
 
 function isWin(
   team: "teamRed" | "teamBlue",
@@ -143,16 +180,16 @@ export const updateRating = internalMutation({
   },
   handler: async (ctx, args) => {
     const K = 32; // adjustment factor (common values: 16, 24, 32; higher means faster rating changes)
-    const redAttacker: Player | null = await ctx.db.get(
+    const redAttacker = await ctx.db.get(
       args.teamRed.attacker as Id<"players">
     );
-    const redDefender: Player | null = await ctx.db.get(
+    const redDefender = await ctx.db.get(
       args.teamRed.defender as Id<"players">
     );
-    const blueAttacker: Player | null = await ctx.db.get(
+    const blueAttacker = await ctx.db.get(
       args.teamBlue.attacker as Id<"players">
     );
-    const blueDefender: Player | null = await ctx.db.get(
+    const blueDefender = await ctx.db.get(
       args.teamBlue.defender as Id<"players">
     );
 
@@ -186,7 +223,7 @@ export const updateRating = internalMutation({
 
     await Promise.all(
       [redAttacker, redDefender, blueAttacker, blueDefender].map(
-        async (p: Player) => await ctx.db.patch(p._id, { rating: p.rating })
+        async (p) => await ctx.db.patch(p._id, { rating: p.rating })
       )
     );
   },
@@ -222,8 +259,8 @@ export const regenerateRating = internalMutation({
 export const regenerateStatistic = mutation({
   args: {},
   handler: async (ctx) => {
-    const allMatches: Match[] = await ctx.db.query("matches").collect();
-    const allPlayers: Player[] = await ctx.db.query("players").collect();
+    const allMatches = await ctx.db.query("matches").collect();
+    const allPlayers = await ctx.db.query("players").collect();
 
     for (const player of allPlayers) {
       await ctx.db.patch(player._id, {
@@ -252,6 +289,40 @@ export const regenerateStatistic = mutation({
         },
       });
       await ctx.runMutation(internal.players.regenerateRating, match);
+    }
+  },
+});
+
+export const regenerateAttAndDef = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const allMatches = await ctx.db.query("matches").collect();
+    const allPlayers = await ctx.db.query("players").collect();
+
+    for (const player of allPlayers) {
+      let asAtt = 0;
+      let asDef = 0;
+      for (const match of allMatches) {
+        if (
+          match.blueAttacker === player._id ||
+          match.redAttacker === player._id
+        ) {
+          asAtt++;
+          continue;
+        }
+        if (
+          match.blueDefender === player._id ||
+          match.redDefender === player._id
+        ) {
+          asDef++;
+          continue;
+        }
+      }
+
+      await ctx.db.patch(player._id, {
+        asAtt,
+        asDef,
+      });
     }
   },
 });

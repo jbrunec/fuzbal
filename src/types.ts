@@ -1,5 +1,5 @@
 import { playerSchema } from "@/schemas";
-import { Id } from "convex/_generated/dataModel";
+import { Doc, Id } from "convex/_generated/dataModel";
 import z from "zod";
 
 export type Player = {
@@ -13,6 +13,8 @@ export type Player = {
   winPercentage: number;
   rating: number;
   streak: number;
+  asAtt: number;
+  asDef: number;
   lastPlayed?: number;
 };
 
@@ -27,3 +29,5 @@ export type Match = {
   blueScore: number;
   _creationTime: number;
 };
+
+export type PlayerModel = Doc<"players">;

@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PlayerModel } from "@/types";
 import {
   flexRender,
   getCoreRowModel,
@@ -15,21 +16,20 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { columns } from "./columns";
-import { Player } from "@/types";
 
 export function PlayersTable({
   data,
   detailed,
 }: {
-  data: Player[];
+  data: PlayerModel[];
   detailed?: boolean;
 }) {
   const [sorting, setSorting] = useState<SortingState>([
     { id: "rating", desc: true },
   ]);
   const columnVisibility = !detailed
-    ? { games: false, wins: false }
-    : { games: true, wins: true };
+    ? { games: false, wins: false, actions: false }
+    : { games: true, wins: true, actions: true };
 
   const table = useReactTable({
     data,
@@ -53,7 +53,6 @@ export function PlayersTable({
                 className="border-gray-800 hover:bg-gray-800/50"
               >
                 {headerGroup.headers.map((header) => {
-                  console.log("this is header: ", header);
                   // if (header.id === "games") {
                   //   return;
                   // }

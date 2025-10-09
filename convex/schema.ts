@@ -20,6 +20,8 @@ export default defineSchema({
     streak: v.float64(),
     winPercentage: v.float64(),
     wins: v.float64(),
+    asAtt: v.optional(v.float64()),
+    asDef: v.optional(v.float64()),
     lastPlayed: v.optional(v.float64()),
   }),
 });
