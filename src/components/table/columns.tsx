@@ -56,6 +56,25 @@ export const columns: ColumnDef<PlayerModel>[] = [
       );
     },
   },
+  // {
+  //   accessorKey: "asAtt",
+  //   header: ({ column }) => {
+  //     return (
+  //       <Button
+  //         variant="ghost"
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //         className="hover:bg-accent text-gray-300 hover:text-white px-1 py-1 text-xs sm:text-sm sm:px-3 sm:py-2 h-auto"
+  //       >
+  //         asAtt
+  //         <ArrowUpDown className="hidden sm:block sm:ml-2 sm:h-4 sm:w-4" />
+  //       </Button>
+  //     );
+  //   },
+  //   cell: ({ row }) => {
+  //     // const date = new Date(row.getValue("lastPlayed")).toDateString();
+  //     return <div className="text-center">{row.getValue("asAtt")}</div>;
+  //   },
+  // },
   {
     accessorKey: "winPercentage",
     header: ({ column }) => {
@@ -118,6 +137,12 @@ export const columns: ColumnDef<PlayerModel>[] = [
     },
   },
   {
+    accessorKey: "asAtt",
+  },
+  {
+    accessorKey: "asDef",
+  },
+  {
     id: "actions",
     header: ({ column }) => {
       return <span>Actions</span>;
@@ -132,7 +157,10 @@ export const columns: ColumnDef<PlayerModel>[] = [
             <DialogHeader>
               <DialogTitle>Additional Stats</DialogTitle>
             </DialogHeader>
-            <div className="flex items-center gap-2">this is content</div>
+            <div className="flex items-center gap-2">
+              Positions as attacker: {row.getValue("asAtt")}, as defender:{" "}
+              {row.getValue("asDef")}
+            </div>
           </DialogContent>
         </Dialog>
       );

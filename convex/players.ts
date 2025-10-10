@@ -105,6 +105,8 @@ export const updateStatistics = internalMutation({
         winPercentage: +p.winPercentage.toFixed(2),
         streak: p.streak,
         lastPlayed: p.lastPlayed,
+        asAtt: p.asAtt,
+        asDef: p.asDef,
       });
     });
   },

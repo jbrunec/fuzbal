@@ -28,8 +28,8 @@ export function PlayersTable({
     { id: "rating", desc: true },
   ]);
   const columnVisibility = !detailed
-    ? { games: false, wins: false, actions: false }
-    : { games: true, wins: true, actions: true };
+    ? { games: false, wins: false, actions: false, asAtt: false, asDef: false }
+    : { games: true, wins: true, actions: true, asAtt: false, asDef: false };
 
   const table = useReactTable({
     data,
