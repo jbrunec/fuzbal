@@ -8,6 +8,7 @@ import { Id } from "convex/_generated/dataModel";
 import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
 import { internal } from "convex/_generated/api";
+import { archiveEloRatings } from "convex/eloHistories";
 
 export const getPlayers = query({
   args: {},
@@ -223,10 +224,11 @@ export const updateRating = internalMutation({
     blueAttacker.rating += deltaBlue;
     blueDefender.rating += deltaBlue;
 
+    const players = [redAttacker, redDefender, blueAttacker, blueDefender];
+
+    await archiveEloRatings(players, ctx);
     await Promise.all(
-      [redAttacker, redDefender, blueAttacker, blueDefender].map(
-        async (p) => await ctx.db.patch(p._id, { rating: p.rating })
-      )
+      players.map((p) => ctx.db.patch(p._id, { rating: p.rating }))
     );
   },
 });

@@ -13,6 +13,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as eloHistories from "../eloHistories.js";
 import type * as matches from "../matches.js";
 import type * as players from "../players.js";
 
@@ -25,6 +26,7 @@ import type * as players from "../players.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  eloHistories: typeof eloHistories;
   matches: typeof matches;
   players: typeof players;
 }>;

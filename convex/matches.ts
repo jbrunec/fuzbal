@@ -56,11 +56,11 @@ export const getMatches = query({
 
 export const postMatch = mutation({
   args: {
-    redAttacker: v.string(),
-    redDefender: v.string(),
+    redAttacker: v.id("players"),
+    redDefender: v.id("players"),
     redScore: v.number(),
-    blueAttacker: v.string(),
-    blueDefender: v.string(),
+    blueAttacker: v.id("players"),
+    blueDefender: v.id("players"),
     blueScore: v.number(),
   },
   handler: async (ctx, args) => {
@@ -91,11 +91,11 @@ export const postMatch = mutation({
         },
       }),
       await ctx.db.insert("matches", {
-        redAttacker: args.redAttacker as Id<"players">,
-        redDefender: args.redDefender as Id<"players">,
+        redAttacker: args.redAttacker,
+        redDefender: args.redDefender,
         redScore: args.redScore,
-        blueAttacker: args.blueAttacker as Id<"players">,
-        blueDefender: args.blueDefender as Id<"players">,
+        blueAttacker: args.blueAttacker,
+        blueDefender: args.blueDefender,
         blueScore: args.blueScore,
       });
   },

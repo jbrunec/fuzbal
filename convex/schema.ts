@@ -24,4 +24,9 @@ export default defineSchema({
     asDef: v.optional(v.float64()),
     lastPlayed: v.float64(),
   }),
+  eloHistories: defineTable({
+    playerId: v.id("players"),
+    date: v.float64(),
+    rating: v.float64(),
+  }),
 });
