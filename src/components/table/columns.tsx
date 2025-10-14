@@ -1,3 +1,4 @@
+import AdditionalInfoDialog from "@/components/additional-info-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -149,20 +150,10 @@ export const columns: ColumnDef<PlayerModel>[] = [
     },
     cell: ({ row }) => {
       return (
-        <Dialog>
-          <DialogTrigger>
-            <Button variant={"outline"}>Stats</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Additional Stats</DialogTitle>
-            </DialogHeader>
-            <div className="flex items-center gap-2">
-              Positions as attacker: {row.getValue("asAtt")}, as defender:{" "}
-              {row.getValue("asDef")}
-            </div>
-          </DialogContent>
-        </Dialog>
+        <AdditionalInfoDialog
+          asAtt={row.getValue("asAtt")}
+          asDef={row.getValue("asDef")}
+        />
       );
       // return <Button variant={"outline"} onClick={() => }>Stats</Button>;
     },
