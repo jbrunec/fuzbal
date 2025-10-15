@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Match } from "@/types";
+import { MatchWithNames } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
-export const columns: ColumnDef<Match>[] = [
+export const columns: ColumnDef<MatchWithNames>[] = [
   {
     accessorKey: "blueDefender",
     header: ({ column }) => {

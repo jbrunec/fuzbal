@@ -144,6 +144,9 @@ export const columns: ColumnDef<PlayerModel>[] = [
     accessorKey: "asDef",
   },
   {
+    accessorKey: "_id",
+  },
+  {
     id: "actions",
     header: ({ column }) => {
       return <span>Actions</span>;
@@ -151,6 +154,7 @@ export const columns: ColumnDef<PlayerModel>[] = [
     cell: ({ row }) => {
       return (
         <AdditionalInfoDialog
+          playerId={row.getValue("_id")}
           asAtt={row.getValue("asAtt")}
           asDef={row.getValue("asDef")}
         />

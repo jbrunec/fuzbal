@@ -7,6 +7,14 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -14,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Match } from "@/types";
+import { MatchWithNames } from "@/types";
 import {
   flexRender,
   getCoreRowModel,
@@ -27,22 +35,12 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { columns } from "./match-columns";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectValue,
-  SelectItem,
-  SelectLabel,
-  SelectGroup,
-} from "@/components/ui/select";
 
 export function MatchesTable({
   data,
   detailed,
 }: {
-  data: Match[];
+  data: MatchWithNames[];
   detailed?: boolean;
 }) {
   const [sorting, setSorting] = useState<SortingState>([

@@ -8,14 +8,15 @@
  * @module
  */
 
+import type * as eloHistories from "../eloHistories.js";
+import type * as matches from "../matches.js";
+import type * as players from "../players.js";
+
 import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as eloHistories from "../eloHistories.js";
-import type * as matches from "../matches.js";
-import type * as players from "../players.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -30,11 +31,15 @@ declare const fullApi: ApiFromModules<{
   matches: typeof matches;
   players: typeof players;
 }>;
+declare const fullApiWithMounts: typeof fullApi;
+
 export declare const api: FilterApi<
-  typeof fullApi,
+  typeof fullApiWithMounts,
   FunctionReference<any, "public">
 >;
 export declare const internal: FilterApi<
-  typeof fullApi,
+  typeof fullApiWithMounts,
   FunctionReference<any, "internal">
 >;
+
+export declare const components: {};

@@ -19,15 +19,15 @@ export type Player = {
 };
 
 export type AddPlayerStatisticsFormData = z.infer<typeof playerSchema>;
-export type Match = {
-  _id: Id<"matches">;
+export type Match = Doc<"matches">;
+export type MatchWithNames = Pick<
+  Match,
+  "_id" | "_creationTime" | "blueScore" | "redScore"
+> & {
   redAttacker: string;
   redDefender: string;
-  redScore: number;
   blueAttacker: string;
-  blueDefender: string;
-  blueScore: number;
-  _creationTime: number;
+  blueDefender: String;
 };
 
 export type PlayerModel = Doc<"players">;

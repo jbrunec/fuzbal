@@ -1,4 +1,4 @@
-import { Match } from "@/types";
+import { Match, MatchWithNames } from "@/types";
 import { api, internal } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
 import { mutation, query } from "convex/_generated/server";
@@ -7,25 +7,23 @@ import { v } from "convex/values";
 
 export const getMatches = query({
   args: {},
-  handler: async (ctx): Promise<Match[]> => {
+  handler: async (ctx) => {
     const players = await ctx.runQuery(api.players.getPlayers);
     const playersMap = players.reduce((map, player) => {
       map[player._id] = player.name;
       return map;
-    }, {} as Record<string, string>);
-    const matches = (await ctx.db
-      .query("matches")
-      .order("desc")
-      .collect()) as Match[];
+    }, {} as Record<Id<"players">, string>);
+    const matches = await ctx.db.query("matches").order("desc").take(100);
 
-    matches.map((m) => {
-      m.blueAttacker = playersMap[m.blueAttacker];
-      m.blueDefender = playersMap[m.blueDefender];
-      m.redAttacker = playersMap[m.redAttacker];
-      m.redDefender = playersMap[m.redDefender];
-    });
+    const matchesWithNames: MatchWithNames[] = matches.map((m) => ({
+      ...m,
+      blueAttacker: playersMap[m.blueAttacker],
+      blueDefender: playersMap[m.blueDefender],
+      redAttacker: playersMap[m.redAttacker],
+      redDefender: playersMap[m.redDefender],
+    }));
 
-    return matches;
+    return matchesWithNames;
   },
 });
 

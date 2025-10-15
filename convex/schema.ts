@@ -28,5 +28,5 @@ export default defineSchema({
     playerId: v.id("players"),
     date: v.float64(),
     rating: v.float64(),
-  }),
+  }).index("by_player_id", ["playerId"]),
 });

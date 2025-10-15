@@ -1,20 +1,18 @@
 import { PlayerModel } from "@/types";
-import { MutationCtx } from "convex/_generated/server";
+import { MutationCtx, query } from "convex/_generated/server";
+import { v } from "convex/values";
 
-// export const archiveEloRatings = internalMutation({
-//   args: {
-//     players: v.array(v.object({ id: v.id("players"), rating: v.number() })),
-//   },
-//   handler: async (ctx, args) => {
-//     for (const player of args.players) {
-//       await ctx.db.insert("eloHistories", {
-//         playerId: player.id,
-//         rating: player.rating,
-//         date: Date.now(),
-//       });
-//     }
-//   },
-// });
+export const getEloRatingsByPlayer = query({
+  args: {
+    playerId: v.id("players"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("eloHistories")
+      .withIndex("by_player_id", (q) => q.eq("playerId", args.playerId))
+      .take(20);
+  },
+});
 
 export async function archiveEloRatings(
   players: PlayerModel[],
