@@ -11,6 +11,7 @@ import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
+import { Authenticated } from "convex/react";
 
 export const Route = createFileRoute("/misfits/")({
   component: RouteComponent,
@@ -34,16 +35,20 @@ function RouteComponent() {
   // const { mutate } = useRegeneratePlayerStatistic();
   // const { mutate } = useRegenerateAttAndDef();
   return (
-    <main className="flex flex-col">
-      <h1 className="text-center text-4xl font-bold text-white">Fuzbal</h1>
-      <section className="flex flex-col gap-4 sm:max-w-6xl sm:mx-auto sm:items-center sm:justify-center my-10">
-        <AddStatisticsBtn />
-        <PlayersTable data={data} detailed={true} />
-        {/* <Button variant={"destructive"} onClick={async () => mutate({})}>
+    <>
+      <Authenticated>
+        <main className="flex flex-col">
+          <h1 className="text-center text-4xl font-bold text-white">Fuzbal</h1>
+          <section className="flex flex-col gap-4 sm:max-w-6xl sm:mx-auto sm:items-center sm:justify-center my-10">
+            <AddStatisticsBtn />
+            <PlayersTable data={data} detailed={true} />
+            {/* <Button variant={"destructive"} onClick={async () => mutate({})}>
           Do not click!
         </Button> */}
-        <MatchesTable data={results} detailed={true} />
-      </section>
-    </main>
+            <MatchesTable data={results} detailed={true} />
+          </section>
+        </main>
+      </Authenticated>
+    </>
   );
 }

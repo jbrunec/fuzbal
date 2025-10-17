@@ -13,6 +13,7 @@ import { archiveEloRatings } from "convex/eloHistories";
 export const getPlayers = query({
   args: {},
   handler: async (ctx) => {
+    // const identity = await ctx.auth.getUserIdentity();
     return await ctx.db.query("players").collect();
   },
 });

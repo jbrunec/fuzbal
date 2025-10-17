@@ -8,6 +8,7 @@ import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
+import { useUser } from "@clerk/tanstack-react-start";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -29,12 +30,13 @@ function App() {
     convexQuery(api.matches.getMatches, {})
   );
   // const { mutate } = useRegeneratePlayerStatistic();
+  const { user } = useUser();
+  console.log("user: ", user);
 
   return (
     <main className="flex flex-col">
       <h1 className="text-center text-4xl font-bold text-white">Fuzbal</h1>
       <section className="flex flex-col gap-4 sm:max-w-6xl sm:mx-auto sm:items-center sm:justify-center mt-10">
-        <AddStatisticsBtn />
         <PlayersTable data={data} detailed={false} />
         {/* <Button variant={"destructive"} onClick={async () => mutate({})}>
           Do not click!

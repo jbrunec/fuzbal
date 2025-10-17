@@ -11,8 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MisfitsIndexRouteImport } from './routes/misfits/index'
+<<<<<<< HEAD
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo.start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo.start.api-request'
+=======
+>>>>>>> 652bfaa (Upgrade start, install clerk, setup convex with clerk & start)
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -24,6 +27,7 @@ const MisfitsIndexRoute = MisfitsIndexRouteImport.update({
   path: '/misfits/',
   getParentRoute: () => rootRouteImport,
 } as any)
+<<<<<<< HEAD
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
   id: '/demo/start/server-funcs',
   path: '/demo/start/server-funcs',
@@ -34,48 +38,38 @@ const DemoStartApiRequestRoute = DemoStartApiRequestRouteImport.update({
   path: '/demo/start/api-request',
   getParentRoute: () => rootRouteImport,
 } as any)
+=======
+>>>>>>> 652bfaa (Upgrade start, install clerk, setup convex with clerk & start)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/misfits': typeof MisfitsIndexRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/misfits': typeof MisfitsIndexRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/misfits/': typeof MisfitsIndexRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/misfits'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
+  fullPaths: '/' | '/misfits'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/misfits' | '/demo/start/api-request' | '/demo/start/server-funcs'
-  id:
-    | '__root__'
-    | '/'
-    | '/misfits/'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
+  to: '/' | '/misfits'
+  id: '__root__' | '/' | '/misfits/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   MisfitsIndexRoute: typeof MisfitsIndexRoute
+<<<<<<< HEAD
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
+=======
+>>>>>>> 652bfaa (Upgrade start, install clerk, setup convex with clerk & start)
 }
 
 declare module '@tanstack/react-router' {
@@ -94,6 +88,7 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MisfitsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+<<<<<<< HEAD
     '/demo/start/server-funcs': {
       id: '/demo/start/server-funcs'
       path: '/demo/start/server-funcs'
@@ -108,14 +103,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoStartApiRequestRouteImport
       parentRoute: typeof rootRouteImport
     }
+=======
+>>>>>>> 652bfaa (Upgrade start, install clerk, setup convex with clerk & start)
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   MisfitsIndexRoute: MisfitsIndexRoute,
-  DemoStartApiRequestRoute: DemoStartApiRequestRoute,
-  DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
