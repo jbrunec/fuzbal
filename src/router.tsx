@@ -9,7 +9,7 @@ import { ConvexQueryClient } from "@convex-dev/react-query";
 import { ConvexProvider } from "convex/react";
 import { routeTree } from "./routeTree.gen";
 
-export function getRouter() {
+export function createRouter() {
   if (typeof document !== "undefined") {
     notifyManager.setScheduler(window.requestAnimationFrame);
   }
@@ -56,6 +56,6 @@ export function getRouter() {
 
 declare module "@tanstack/react-router" {
   interface Register {
-    router: ReturnType<typeof getRouter>;
+    router: ReturnType<typeof createRouter>;
   }
 }
