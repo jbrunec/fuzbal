@@ -8,7 +8,8 @@ import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import { useUser } from "@clerk/tanstack-react-start";
+import { SignInButton, useUser } from "@clerk/tanstack-react-start";
+import { Unauthenticated } from "convex/react";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -30,19 +31,24 @@ function App() {
     convexQuery(api.matches.getMatches, {})
   );
   // const { mutate } = useRegeneratePlayerStatistic();
-  const { user } = useUser();
-  console.log("user: ", user);
 
   return (
-    <main className="flex flex-col">
-      <h1 className="text-center text-4xl font-bold text-white">Fuzbal</h1>
-      <section className="flex flex-col gap-4 sm:max-w-6xl sm:mx-auto sm:items-center sm:justify-center mt-10">
-        <PlayersTable data={data} detailed={false} />
-        {/* <Button variant={"destructive"} onClick={async () => mutate({})}>
+    <>
+      <Unauthenticated>
+        <SignInButton mode="modal">
+          <Button variant={"default"}>Sign in</Button>
+        </SignInButton>
+      </Unauthenticated>
+      <main className="flex flex-col">
+        <h1 className="text-center text-4xl font-bold text-white">Fuzbal</h1>
+        <section className="flex flex-col gap-4 sm:max-w-6xl sm:mx-auto sm:items-center sm:justify-center mt-10">
+          <PlayersTable data={data} detailed={false} />
+          {/* <Button variant={"destructive"} onClick={async () => mutate({})}>
           Do not click!
         </Button> */}
-        <MatchesTable data={results} detailed={false} />
-      </section>
-    </main>
+          <MatchesTable data={results} detailed={false} />
+        </section>
+      </main>
+    </>
   );
 }

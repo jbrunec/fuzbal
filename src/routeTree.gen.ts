@@ -11,11 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MisfitsIndexRouteImport } from './routes/misfits/index'
-<<<<<<< HEAD
-import { Route as DemoStartServerFuncsRouteImport } from './routes/demo.start.server-funcs'
-import { Route as DemoStartApiRequestRouteImport } from './routes/demo.start.api-request'
-=======
->>>>>>> 652bfaa (Upgrade start, install clerk, setup convex with clerk & start)
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -27,19 +22,6 @@ const MisfitsIndexRoute = MisfitsIndexRouteImport.update({
   path: '/misfits/',
   getParentRoute: () => rootRouteImport,
 } as any)
-<<<<<<< HEAD
-const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
-  id: '/demo/start/server-funcs',
-  path: '/demo/start/server-funcs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartApiRequestRoute = DemoStartApiRequestRouteImport.update({
-  id: '/demo/start/api-request',
-  path: '/demo/start/api-request',
-  getParentRoute: () => rootRouteImport,
-} as any)
-=======
->>>>>>> 652bfaa (Upgrade start, install clerk, setup convex with clerk & start)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -65,11 +47,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   MisfitsIndexRoute: typeof MisfitsIndexRoute
-<<<<<<< HEAD
-  DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
-  DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
-=======
->>>>>>> 652bfaa (Upgrade start, install clerk, setup convex with clerk & start)
 }
 
 declare module '@tanstack/react-router' {
@@ -88,23 +65,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MisfitsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-<<<<<<< HEAD
-    '/demo/start/server-funcs': {
-      id: '/demo/start/server-funcs'
-      path: '/demo/start/server-funcs'
-      fullPath: '/demo/start/server-funcs'
-      preLoaderRoute: typeof DemoStartServerFuncsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/start/api-request': {
-      id: '/demo/start/api-request'
-      path: '/demo/start/api-request'
-      fullPath: '/demo/start/api-request'
-      preLoaderRoute: typeof DemoStartApiRequestRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-=======
->>>>>>> 652bfaa (Upgrade start, install clerk, setup convex with clerk & start)
   }
 }
 

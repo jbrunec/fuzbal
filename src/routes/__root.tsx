@@ -96,14 +96,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="p-0 sm:p-6 min-h-screen dark:bg-gradient-to-r dark:from-[#1b2641]  dark:to-[#56606e]">
-        <Authenticated>
-          <UserButton />
-        </Authenticated>
-        <Unauthenticated>
-          <SignInButton mode="modal">
-            <Button variant={"default"}>Sign in</Button>
-          </SignInButton>
-        </Unauthenticated>
         {children}
         <Scripts />
       </body>

@@ -1,19 +1,14 @@
-import {
-  AddPlayerStatisticsFormData,
-  Match,
-  Player,
-  PlayerModel,
-} from "@/types";
+import { AddPlayerStatisticsFormData, Player, PlayerModel } from "@/types";
+import { internal } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
+import { archiveEloRatings } from "convex/eloHistories";
 import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
-import { internal } from "convex/_generated/api";
-import { archiveEloRatings } from "convex/eloHistories";
 
 export const getPlayers = query({
   args: {},
   handler: async (ctx) => {
-    // const identity = await ctx.auth.getUserIdentity();
+    const identity = await ctx.auth.getUserIdentity();
     return await ctx.db.query("players").collect();
   },
 });
