@@ -2,6 +2,7 @@ import { AddStatisticsBtn } from "@/components/add-statistics-btn";
 import { MatchesTable } from "@/components/table/matches-table";
 import { PlayersTable } from "@/components/table/players-table";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { useRegeneratePlayerStatistic } from "@/queries";
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -10,7 +11,11 @@ import { api } from "convex/_generated/api";
 
 export const Route = createFileRoute("/")({
   component: App,
-  pendingComponent: () => <>Loading!</>,
+  pendingComponent: () => (
+    <>
+      <Spinner className="text-white" />
+    </>
+  ),
   errorComponent: () => <>ERROR</>,
   notFoundComponent: () => <>not found</>,
   loader: async ({ params, context: { QueryClient } }) => {

@@ -2,6 +2,7 @@ import { AddStatisticsBtn } from "@/components/add-statistics-btn";
 import { MatchesTable } from "@/components/table/matches-table";
 import { PlayersTable } from "@/components/table/players-table";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import {
   useRegenerateAttAndDef,
   useRegeneratePlayerStatistic,
@@ -13,7 +14,11 @@ import { api } from "convex/_generated/api";
 
 export const Route = createFileRoute("/misfits/")({
   component: RouteComponent,
-  pendingComponent: () => <>Loading!</>,
+  pendingComponent: () => (
+    <>
+      <Spinner className="text-white" />
+    </>
+  ),
   errorComponent: () => <>ERROR</>,
   notFoundComponent: () => <>not found</>,
   loader: async ({ params, context: { QueryClient } }) => {
