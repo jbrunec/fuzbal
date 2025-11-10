@@ -65,7 +65,6 @@ export function AddPlayerStatisticsForm({
     },
   });
 
-  console.log("options: ", playerSelectOptions);
   return (
     <form
       onSubmit={(e) => {

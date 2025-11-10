@@ -7,10 +7,12 @@ export const getEloRatingsByPlayer = query({
     playerId: v.id("players"),
   },
   handler: async (ctx, args) => {
-    return await ctx.db
+    const res = await ctx.db
       .query("eloHistories")
       .withIndex("by_player_id", (q) => q.eq("playerId", args.playerId))
+      .order("desc")
       .take(20);
+    return res.reverse();
   },
 });
 

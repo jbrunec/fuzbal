@@ -21,14 +21,6 @@ type AdditionalInfoDialogProps = {
   asDef: number;
 };
 
-const data = [
-  { dateString: "date 1", rating: 1500 },
-  { dateString: "date 2", rating: 1532 },
-  { dateString: "date 3", rating: 1502 },
-  { dateString: "date 4", rating: 1487 },
-  { dateString: "date 5", rating: 1499 },
-];
-
 export default function AdditionalInfoDialog({
   playerId,
   asAtt,

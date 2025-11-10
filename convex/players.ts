@@ -179,6 +179,7 @@ export const updateRating = internalMutation({
   },
   handler: async (ctx, args) => {
     const K = 32; // adjustment factor (common values: 16, 24, 32; higher means faster rating changes)
+
     const redAttacker = await ctx.db.get(
       args.teamRed.attacker as Id<"players">
     );
@@ -212,8 +213,14 @@ export const updateRating = internalMutation({
     const actualRed = args.teamRed.goals > args.teamBlue.goals ? 1 : 0;
     const actualBlue = 1 - actualRed;
 
-    const deltaRed = K * (actualRed - expectedRatingRed);
-    const deltaBlue = K * (actualBlue - expectedRatingBlue);
+    const marginFactor = calculateGoalDifferenceBonus(
+      args.teamRed.goals,
+      args.teamBlue.goals
+    );
+    const effectiveK = K * marginFactor;
+
+    const deltaRed = effectiveK * (actualRed - expectedRatingRed);
+    const deltaBlue = effectiveK * (actualBlue - expectedRatingBlue);
 
     redAttacker.rating += deltaRed;
     redDefender.rating += deltaRed;
@@ -326,6 +333,15 @@ export const regenerateAttAndDef = mutation({
     }
   },
 });
+
+function calculateGoalDifferenceBonus(scoreA: number, scoreB: number) {
+  const goalDifferenceWeight = 0.6; // 7-6=35.5K 7-4=41.60K 7-2=48K 7-1=51.20K
+  const margin = scoreA - scoreB;
+  const maxMargin = 7;
+  const marginFactor = 1 + goalDifferenceWeight * (margin / maxMargin);
+
+  return marginFactor;
+}
 
 function applyDecay(player: Player, decayPercent = 0.02) {
   if (!player.lastPlayed) return;
