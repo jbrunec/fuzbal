@@ -11,7 +11,7 @@ export const getEloRatingsByPlayer = query({
       .query("eloHistories")
       .withIndex("by_player_id", (q) => q.eq("playerId", args.playerId))
       .order("desc")
-      .take(20);
+      .take(50);
     return res.reverse();
   },
 });

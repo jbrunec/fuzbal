@@ -5,3 +5,7 @@ pnpm dev
 ## reset players table
 
 pnpx convex import --table players --replace src/db/samplePlayers.jsonl
+
+## apply convex backend functions
+
+npx convex dev
