@@ -223,15 +223,21 @@ export const updateRating = internalMutation({
     const deltaBlue = effectiveK * (actualBlue - expectedRatingBlue);
 
     redAttacker.rating += deltaRed;
+    redAttacker.ratingDiff = deltaRed;
     redDefender.rating += deltaRed;
+    redDefender.ratingDiff = deltaRed;
     blueAttacker.rating += deltaBlue;
+    blueAttacker.ratingDiff = deltaBlue;
     blueDefender.rating += deltaBlue;
+    blueDefender.ratingDiff = deltaBlue;
 
     const players = [redAttacker, redDefender, blueAttacker, blueDefender];
 
     await archiveEloRatings(players, ctx);
     await Promise.all(
-      players.map((p) => ctx.db.patch(p._id, { rating: p.rating }))
+      players.map((p) =>
+        ctx.db.patch(p._id, { rating: p.rating, ratingDiff: p.ratingDiff })
+      )
     );
   },
 });

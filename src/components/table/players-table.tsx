@@ -35,6 +35,7 @@ export function PlayersTable({
         asAtt: false,
         asDef: false,
         _id: false,
+        ratingDiff: false,
       }
     : {
         games: true,
@@ -43,6 +44,7 @@ export function PlayersTable({
         asAtt: false,
         asDef: false,
         _id: false,
+        ratingDiff: false,
       };
 
   const table = useReactTable({

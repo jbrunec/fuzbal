@@ -17,6 +17,7 @@ export default defineSchema({
     goalsReceivedAsDefender: v.float64(),
     name: v.string(),
     rating: v.float64(),
+    ratingDiff: v.optional(v.float64()),
     streak: v.float64(),
     winPercentage: v.float64(),
     wins: v.float64(),

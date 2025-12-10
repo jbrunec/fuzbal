@@ -1,4 +1,5 @@
 import AdditionalInfoDialog from "@/components/additional-info-dialog";
+import RatingDiffDisplay from "@/components/table/rating-diff-display";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -111,7 +112,12 @@ export const columns: ColumnDef<PlayerModel>[] = [
     },
     cell: ({ row }) => {
       const rating = Number.parseFloat(row.getValue("rating")).toPrecision(4);
-      return <div className="text-center">{rating}</div>;
+      const ratingDiff = row.getValue<number>("ratingDiff");
+      return (
+        <div className="text-center">
+          {rating} <RatingDiffDisplay ratingDiff={ratingDiff} />
+        </div>
+      );
     },
   },
   {
@@ -145,6 +151,9 @@ export const columns: ColumnDef<PlayerModel>[] = [
   },
   {
     accessorKey: "_id",
+  },
+  {
+    accessorKey: "ratingDiff",
   },
   {
     id: "actions",
